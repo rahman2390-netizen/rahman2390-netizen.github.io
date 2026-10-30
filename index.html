@@ -1,254 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>English Class</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:wght@500;700&family=Hind+Siliguri:wght@400;500;600&display=swap">
+<title>Learn With Naznin</title>
 <style>
-:root{
-  --bg:#eaf0f6; --card:#ffffff; --ink:#14213d; --muted:#5b6b85;
-  --line:#d3dce8; --accent:#f2a900; --accent-ink:#14213d; --err:#b3261e; --soft:#fff6dd;
-}
-@media (prefers-color-scheme: dark){
-  :root{ --bg:#0f1830; --card:#18233f; --ink:#eef2f8; --muted:#9db0cc; --line:#2b3a5c; --err:#ff8a80; --soft:#2a2c3a; }
-}
+:root{--bg:#f6f4ff;--card:#fff;--tx:#1f1b2e;--mu:#6b6785;--ac:#6c4ff0;--bd:#e3dffa;--tip:#fff7df}
+@media (prefers-color-scheme:dark){:root{--bg:#14121f;--card:#1e1b2e;--tx:#ece9fb;--mu:#a29fbd;--ac:#9a84ff;--bd:#322e4d;--tip:#2e2916}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hind Siliguri",system-ui,sans-serif;line-height:1.7}
-h1,h2,h3,.word{font-family:"Literata",Georgia,serif}
-.hidden{display:none!important}
-
-/* Login */
-#login{min-height:100vh;display:grid;place-items:center;padding:20px}
-.box{width:100%;max-width:360px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px}
-.box h1{margin:0 0 4px;font-size:1.6rem}
-.box p{margin:0 0 20px;color:var(--muted)}
-label{display:block;font-weight:600;margin:12px 0 4px}
-input{width:100%;padding:10px 12px;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px}
-input:focus,button:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
-button{font:inherit;font-weight:600;cursor:pointer;border:0;border-radius:8px;padding:10px 16px}
-.primary{width:100%;margin-top:18px;background:var(--accent);color:var(--accent-ink)}
-#error{color:var(--err);min-height:1.5em;margin:10px 0 0}
-
-/* Layout */
-header{max-width:780px;margin:0 auto;padding:24px 20px 8px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-header h1{margin:0;font-size:1.7rem}
-.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
-nav{max-width:780px;margin:0 auto;padding:8px 20px;display:flex;gap:8px;flex-wrap:wrap}
-nav button{background:var(--card);color:var(--ink);border:1px solid var(--line)}
-nav button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-main{max-width:780px;margin:0 auto;padding:8px 20px 48px}
-
-/* Lesson */
-.lesson h2{font-size:1.5rem;margin:30px 0 8px}
-.lesson h3{font-size:1.15rem;margin:18px 0 4px}
-.card{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:14px 18px;margin:12px 0}
-.card p{margin:4px 0}
-.en{font-family:"Literata",Georgia,serif}
-.note{background:var(--soft);border:1px dashed var(--accent);border-radius:10px;padding:12px 16px;margin:12px 0}
-.eg{color:var(--muted);font-style:italic}
-.marks{display:flex;gap:10px;margin:8px 0}
-.marks span{font-family:"Literata",serif;font-size:1.6rem;font-weight:700;width:48px;height:48px;display:grid;place-items:center;background:var(--card);border:2px solid var(--accent);border-radius:50%}
-.marks small{display:block;font-family:"Hind Siliguri",sans-serif;font-size:.7rem;font-weight:500;text-align:center;color:var(--muted)}
-.flow{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
-.flow div{flex:1;min-width:150px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center;font-weight:600}
-
-/* Vocabulary */
-.tools{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
-.tools input{flex:1;min-width:200px}
-.tools .toggle{background:var(--card);color:var(--ink);border:1px solid var(--line)}
-.word{font-size:1.3rem;font-weight:700}
-.pos{color:var(--muted);font-style:italic;margin-left:8px;font-size:.95rem}
-.bn{font-weight:500}
-.meanings-off .def,.meanings-off .bn{filter:blur(6px);cursor:pointer;user-select:none}
-.meanings-off .entry.reveal .def,.meanings-off .entry.reveal .bn{filter:none}
-#count{color:var(--muted);margin:4px 0}
+body{margin:0;font-family:system-ui,"Noto Sans Bengali",sans-serif;background:var(--bg);color:var(--tx);line-height:1.55}
+header{text-align:center;padding:22px 12px 8px}
+h1{margin:0;font-size:clamp(26px,6vw,38px);color:var(--ac)}
+header p{margin:4px 0 0;color:var(--mu)}
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 12px;display:flex;gap:8px;flex-wrap:wrap;max-width:860px;margin:auto}
+.bar input{flex:1 1 220px;padding:11px 14px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx);font-size:16px}
+button{cursor:pointer;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:10px 14px;border-radius:12px;font-size:15px}
+button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+main{max-width:860px;margin:auto;padding:6px 12px 40px}
+.count{color:var(--mu);font-size:14px;margin:4px 2px 10px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;margin-bottom:14px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.w{font-size:24px;font-weight:700;color:var(--ac)}
+.pr{color:var(--mu);font-style:italic}.pos{font-size:13px;color:var(--mu)}
+.star{font-size:26px;line-height:1;padding:6px 10px;color:var(--mu)}
+.star.f{color:#f5a623;border-color:#f5a623}
+.lb{font-weight:700;margin-top:8px;font-size:14px;color:var(--ac)}
+.tip{background:var(--tip);border-radius:10px;padding:8px 12px;margin-top:10px}
+.hide .bn{display:none}
+.num{font-size:12px;color:var(--mu)}
+.empty{text-align:center;color:var(--mu);padding:30px}
+#login{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:20}
+#login form{background:var(--card);border:1px solid var(--bd);padding:26px;border-radius:18px;width:min(340px,92vw);display:grid;gap:10px;text-align:center}
+#login input{padding:11px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font-size:16px}
+#err{color:#d33;font-size:14px;min-height:18px}
 </style>
 </head>
 <body>
+<div id="login"><form id="lf">
+<h2 style="margin:0;color:var(--ac)">Learn With Naznin</h2>
+<input id="uid" placeholder="ID" autocomplete="username">
+<input id="pw" type="password" placeholder="Password" autocomplete="current-password">
+<button class="on" type="submit">প্রবেশ করুন</button><div id="err"></div></form></div>
 
-<section id="login">
-  <div class="box">
-    <h1>English Class</h1>
-    <p>Sign in to open your lessons.</p>
-    <label for="uid">ID</label>
-    <input id="uid" autocomplete="username">
-    <label for="pw">Password</label>
-    <input id="pw" type="password" autocomplete="current-password">
-    <p id="error" role="alert"></p>
-    <button class="primary" id="loginBtn">Sign in</button>
-  </div>
-</section>
-
-<section id="app" class="hidden">
-  <header>
-    <h1>English Class</h1>
-    <button class="ghost" id="logoutBtn">Sign out</button>
-  </header>
-  <nav role="tablist">
-    <button role="tab" id="tab-class1" aria-selected="true" data-tab="class1">Class 1: Sentence &amp; Clause</button>
-    <button role="tab" id="tab-vocab" aria-selected="false" data-tab="vocab">Vocabulary</button>
-  </nav>
-
-  <main>
-  <!-- ===== CLASS 1 ===== -->
-  <div id="class1" class="lesson">
-    <h2>Sentence</h2>
-    <div class="card">
-      <p class="en">The part of a text that comes immediately before a sentence-ending punctuation mark is called a sentence.</p>
-      <p>Sentence ending punctuation হলো তিনটি:</p>
-      <div class="marks">
-        <div><span>.</span><small>Full stop<br>ফুলস্টপ</small></div>
-        <div><span>?</span><small>Question mark<br>প্রশ্নবোধক</small></div>
-        <div><span>!</span><small>Exclamation<br>আশ্চর্যবোধক</small></div>
-      </div>
-    </div>
-
-    <h2>Types of sentences</h2>
-    <p class="en">There are three types of sentences based on the structure of a sentence.</p>
-
-    <div class="card">
-      <h3>1. Simple Sentence</h3>
-      <p>যেই বাক্যে মাত্র একটা Independent Clause থাকবে এবং কোনো Dependent Clause থাকবে না, সেটা Simple Sentence।</p>
-      <p class="eg">Example: I like tea.</p>
-    </div>
-    <div class="card">
-      <h3>2. Compound Sentence</h3>
-      <p>কোনো Dependent Clause থাকবে না, কিন্তু Independent Clause-এর সংখ্যা একের বেশি হবে।</p>
-      <p class="eg">Example: I like tea, and she likes coffee.</p>
-    </div>
-    <div class="card">
-      <h3>3. Complex Sentence</h3>
-      <p>Dependent Clause থাকলেই সেটা Complex Sentence হবে। Complex Sentence-এ Independent Clause একটাও থাকতে পারে, একের বেশিও থাকতে পারে।</p>
-      <p class="eg">Example: I like tea because it is warm.</p>
-    </div>
-
-    <h2>Clause</h2>
-    <div class="card">
-      <p class="en">A clause is a part of a sentence that can also be used as a complete sentence.</p>
-      <p class="en">Clauses are basically of two types:</p>
-      <div class="flow"><div>Independent Clause</div><div>Dependent Clause</div></div>
-    </div>
-
-    <div class="note">
-      <strong>Independent Clause চেনার উপায়:</strong> যদি কোনো Clause-কে সহজভাবে কেটে নিয়ে একটা ফুলস্টপ দিয়ে বসিয়ে দেওয়া যায়, তবে তাকে Independent Clause বলে।
-    </div>
-
-    <h3>Three types of Dependent Clause</h3>
-    <div class="flow"><div>Adjective Clause</div><div>Adverb Clause</div><div>Noun Clause</div></div>
-
-    <h2>Clause is the head of the sentence</h2>
-    <div class="card">
-      <p class="en">As we see, a sentence is basically controlled by different clauses, so a clause is called the head of the sentence.</p>
-      <p class="en">When a clause is reduced, it turns into a phrase. Unfortunately, a phrase has no control over the structure of the sentence.</p>
-    </div>
-  </div>
-
-  <!-- ===== VOCABULARY ===== -->
-  <div id="vocab" class="hidden">
-    <div class="tools">
-      <input id="search" type="search" placeholder="Search a word or Bengali meaning" aria-label="Search words">
-      <button class="toggle" id="toggleBtn">Hide meanings</button>
-    </div>
-    <p id="count"></p>
-    <div id="list"></div>
-  </div>
-  </main>
-</section>
+<div id="app" style="display:none">
+<header><h1>Learn With Naznin</h1><p>English Word Meaning Learning</p></header>
+<div class="bar">
+<input id="q" type="search" placeholder="🔍 শব্দ বা অর্থ খুঁজুন...">
+<button id="hb">বাংলা Hide</button>
+<button id="fb">⭐ Favourite</button>
+<button id="lo">Logout</button>
+</div>
+<main><div class="count" id="ct"></div><div id="list"></div></main>
+</div>
 
 <script>
-/* The hash below is for ID "student" and password "vocab123". */
-const LOGIN_HASH = "71bb023a87d04168df88ed79d2a6ecb2f884172b165268f9a2457fcadef01124";
-
-const WORDS = [
-  ["abandon","verb","to leave completely","ত্যাগ করা","He abandoned his plan."],
-  ["accurate","adjective","correct and exact","নির্ভুল","The report is accurate."],
-  ["achieve","verb","to succeed in reaching a goal","অর্জন করা","She achieved her dream."],
-  ["benefit","noun","a helpful or good result","সুবিধা, উপকার","Exercise has many benefits."],
-  ["challenge","noun","a difficult task that tests you","চ্যালেঞ্জ, প্রতিবন্ধকতা","Learning English is a challenge."],
-  ["consider","verb","to think about carefully","বিবেচনা করা","Please consider my request."],
-  ["decrease","verb","to become smaller or less","হ্রাস পাওয়া","Prices decreased last month."],
-  ["efficient","adjective","working well without waste","দক্ষ","This is an efficient method."],
-  ["essential","adjective","absolutely necessary","অপরিহার্য","Water is essential for life."],
-  ["generate","verb","to produce or create","উৎপাদন করা","Solar panels generate power."],
-  ["identify","verb","to recognize and name","শনাক্ত করা","Can you identify the problem?"],
-  ["improve","verb","to make or become better","উন্নতি করা","I want to improve my speaking."],
-  ["maintain","verb","to keep in good condition","বজায় রাখা","Maintain a healthy routine."],
-  ["obtain","verb","to get or receive","লাভ করা, সংগ্রহ করা","He obtained a visa."],
-  ["potential","noun","possible ability to develop","সম্ভাবনা","The child has great potential."],
-  ["require","verb","to need or demand","প্রয়োজন হওয়া","This job requires experience."],
-  ["significant","adjective","important or large enough to matter","উল্লেখযোগ্য","There was a significant change."],
-  ["support","verb","to help or give strength","সমর্থন করা","Families support each other."],
-  ["traditional","adjective","following old customs","ঐতিহ্যবাহী","We ate a traditional meal."],
-  ["vulnerable","adjective","easily hurt or harmed","ঝুঁকিপূর্ণ, অরক্ষিত","Children are vulnerable in floods."]
+// ===== লগইন (ID/Password বদলাতে নিচের README দেখুন) =====
+const USER_ID="naznin", PASS_HASH="3ab1a878c89b5baf99fb61af469c3dcde4f13e2ef1b4442e78a4c0dff24ffa4b";
+// ===== শব্দের ডাটা: নতুন শব্দ যোগ করতে এই তালিকায় একই ফরম্যাটে লিখুন =====
+const DATA=[
+{n:1,w:"Luminous",p:"লূমিনাস",pos:"adjective",
+ syn:"Radiant (দীপ্তিমান), Dazzling (চোখধাঁধানো), Glowing (অনুরঞ্জিত), Lucid (স্বচ্ছ, নির্মল), Vivid (স্পষ্ট, উজ্জ্বল)",
+ ant:"Dark (অন্ধকার), Dim (আবছা), Dull (নিস্তেজ), Gloomy (বিষণ্ণ), Shadowy (ছায়াময়)",
+ en:"Softly bright or radiant.",bn:"আলোকোজ্জ্বল; উজ্জ্বল; (লাক্ষণিক) স্পষ্ট; সহজবোধ্য।",
+ ex:["The moon was full, and gave off a luminous blue glow.","I saw the cat's luminous eyes in my car's headlights."],
+ tip:"Luminous ≈ লুমিনাস → \"লুমিনাস\" শুনলেই মনে করো Illuminate (আলোকিত করা) — যা আলো ছড়ায়, সেটাই Luminous।"},
+{n:2,w:"Veracious",p:"ভারেইশাস",pos:"adjective",
+ syn:"Exact (যথাযথ), Literal (আক্ষরিক), Faithful (বিশ্বস্ত), Honest (সৎ), Truthful (সত্যপরায়ণ; সত্যবাদী)",
+ ant:"Untrue (অসত্য), Dishonest (অসৎ), Improper (অনুপযুক্ত), Fraudulent (প্রতারণামূলক), Mendacious (দুষ্টু)",
+ en:"Precisely accurate; habitually speaking the truth.",bn:"সত্য; যথার্থ; সত্যপরায়ণ; সত্যসন্ধ; সত্যনিষ্ঠ; সত্যবাদী।",
+ ex:["We are the more pleased to have its authenticity vouched for by this veracious witness.","It is such a rarity to discover an album that is held together by songs of veracious beauty."],
+ tip:"Veracious-এর শুরুতে Ver = Very/সত্য (Verify, Verdict-এও সত্যের ইঙ্গিত)। Ver → সত্য মনে রাখো।"},
+{n:3,w:"Euphemism",p:"ইউফামিজাম",pos:"countable & uncountable noun",
+ syn:"Softening (নরম করা), Politeness (শিষ্টতা), Pomposity (বাগাড়ম্বর), Delicacy (মাধুর্যময় কথা)",
+ ant:"Straightforwardness (সোজাসাপ্টা কথা), Directness (সরাসরি কথা বলা)",
+ en:"A word or phrase used to avoid saying an unpleasant or offensive word.",
+ bn:"সুভাষণ; সত্যিকার শব্দের পরিবর্তে অন্য কোনো শব্দের ব্যবহার; যেমন - 'মৃত্যু' শব্দের বদলে 'পরলোকগমন' বাক্যাংশের ব্যবহার।",
+ ex:["She wants to reclaim the word old and rejects euphemisms like elderly and seniors.","The story is patient, which some may find a euphemism for slow."],
+ tip:"Eu = ভালো (Euphoria = ভালো অনুভূতি) + phemism = কথা → ভালো করে বলা কথা = সুভাষণ।"}
 ];
 
-const $ = id => document.getElementById(id);
-
-async function sha256(text){
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
-  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,"0")).join("");
+const $=s=>document.querySelector(s);
+let favs=[];try{favs=JSON.parse(localStorage.getItem("naznin_favs")||"[]")}catch(e){}
+let hideBn=false,onlyFav=false;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function saveFavs(){try{localStorage.setItem("naznin_favs",JSON.stringify(favs))}catch(e){}}
+function render(){
+ const q=$("#q").value.trim().toLowerCase();
+ const rows=DATA.filter(d=>(!onlyFav||favs.includes(d.n))&&(!q||JSON.stringify(d).toLowerCase().includes(q)));
+ $("#ct").textContent=rows.length+" টি শব্দ";
+ $("#list").innerHTML=rows.length?rows.map(d=>`<div class="card">
+ <div class="top"><div><div class="num">Word No: ${d.n}</div><span class="w">${esc(d.w)}</span> <span class="pr bn">[${esc(d.p)}]</span><div class="pos">${esc(d.pos)}</div></div>
+ <button class="star ${favs.includes(d.n)?"f":""}" data-n="${d.n}" aria-label="favourite">${favs.includes(d.n)?"★":"☆"}</button></div>
+ <div class="lb">English Meaning</div><div>${esc(d.en)}</div>
+ <div class="lb bn">বাংলা অর্থ</div><div class="bn">${esc(d.bn)}</div>
+ <div class="lb">Synonyms</div><div>${hideBn?esc(d.syn.replace(/\s*\([^)]*\)/g,"")):esc(d.syn)}</div>
+ <div class="lb">Antonyms</div><div>${hideBn?esc(d.ant.replace(/\s*\([^)]*\)/g,"")):esc(d.ant)}</div>
+ <div class="lb">Example</div>${d.ex.map((e,i)=>`<div><i>${i+1}. ${esc(e)}</i></div>`).join("")}
+ <div class="tip bn">💡 <b>মনে রাখার কৌশল:</b> ${esc(d.tip)}</div></div>`).join(""):'<div class="empty">কোনো শব্দ পাওয়া যায়নি</div>';
 }
-
-function show(loggedIn){
-  $("login").classList.toggle("hidden", loggedIn);
-  $("app").classList.toggle("hidden", !loggedIn);
-  if(loggedIn) renderWords();
-}
-
-async function login(){
-  const hash = await sha256($("uid").value.trim() + ":" + $("pw").value);
-  if(hash === LOGIN_HASH){
-    try{ sessionStorage.setItem("class_ok","1"); }catch(e){}
-    $("error").textContent = "";
-    $("pw").value = "";
-    show(true);
-  }else{
-    $("error").textContent = "Wrong ID or password. Try again.";
-  }
-}
-
-function renderWords(){
-  const q = $("search").value.trim().toLowerCase();
-  const items = WORDS.filter(w => w.join(" ").toLowerCase().includes(q));
-  $("count").textContent = items.length + " of " + WORDS.length + " words";
-  $("list").innerHTML = items.length ? items.map(w => `
-    <article class="card entry">
-      <div><span class="word">${w[0]}</span><span class="pos">${w[1]}</span></div>
-      <p class="def">${w[2]}</p>
-      <p class="bn">${w[3]}</p>
-      <p class="eg">“${w[4]}”</p>
-    </article>`).join("") : "<p>No word found.</p>";
-}
-
-function openTab(name){
-  ["class1","vocab"].forEach(t => {
-    $(t).classList.toggle("hidden", t !== name);
-    $("tab-" + t).setAttribute("aria-selected", t === name);
-  });
-}
-
-$("loginBtn").addEventListener("click", login);
-$("pw").addEventListener("keydown", e => { if(e.key === "Enter") login(); });
-$("uid").addEventListener("keydown", e => { if(e.key === "Enter") $("pw").focus(); });
-$("logoutBtn").addEventListener("click", () => {
-  try{ sessionStorage.removeItem("class_ok"); }catch(e){}
-  show(false);
-});
-document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => openTab(b.dataset.tab)));
-$("search").addEventListener("input", renderWords);
-$("toggleBtn").addEventListener("click", () => {
-  const off = $("list").classList.toggle("meanings-off");
-  $("toggleBtn").textContent = off ? "Show meanings" : "Hide meanings";
-});
-$("list").addEventListener("click", e => {
-  const entry = e.target.closest(".entry");
-  if(entry) entry.classList.toggle("reveal");
-});
-
-let ok = false;
-try{ ok = sessionStorage.getItem("class_ok") === "1"; }catch(e){}
-show(ok);
+$("#q").oninput=render;
+$("#hb").onclick=()=>{hideBn=!hideBn;document.body.classList.toggle("hide",hideBn);$("#hb").classList.toggle("on",hideBn);$("#hb").textContent=hideBn?"বাংলা Show":"বাংলা Hide";render()};
+$("#fb").onclick=()=>{onlyFav=!onlyFav;$("#fb").classList.toggle("on",onlyFav);render()};
+$("#list").onclick=e=>{const b=e.target.closest(".star");if(!b)return;const n=+b.dataset.n;favs=favs.includes(n)?favs.filter(x=>x!==n):[...favs,n];saveFavs();render()};
+async function sha(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+function enter(){$("#login").style.display="none";$("#app").style.display="block";render()}
+$("#lf").onsubmit=async e=>{e.preventDefault();
+ if($("#uid").value.trim()===USER_ID&&await sha($("#pw").value)===PASS_HASH){try{sessionStorage.setItem("naznin_in","1")}catch(x){}enter()}
+ else $("#err").textContent="ID বা Password ভুল হয়েছে"};
+$("#lo").onclick=()=>{try{sessionStorage.removeItem("naznin_in")}catch(x){}location.reload()};
+try{if(sessionStorage.getItem("naznin_in")==="1")enter()}catch(e){}
 </script>
 </body>
 </html>
