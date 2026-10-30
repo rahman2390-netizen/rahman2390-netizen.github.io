@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Essential English Vocabulary</title>
+<title>English Class</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:wght@500;700&family=Hind+Siliguri:wght@400;500;600&display=swap">
 <style>
 :root{
   --bg:#eaf0f6; --card:#ffffff; --ink:#14213d; --muted:#5b6b85;
-  --line:#d3dce8; --accent:#f2a900; --accent-ink:#14213d; --err:#b3261e;
+  --line:#d3dce8; --accent:#f2a900; --accent-ink:#14213d; --err:#b3261e; --soft:#fff6dd;
 }
 @media (prefers-color-scheme: dark){
-  :root{ --bg:#0f1830; --card:#18233f; --ink:#eef2f8; --muted:#9db0cc; --line:#2b3a5c; --err:#ff8a80; }
+  :root{ --bg:#0f1830; --card:#18233f; --ink:#eef2f8; --muted:#9db0cc; --line:#2b3a5c; --err:#ff8a80; --soft:#2a2c3a; }
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hind Siliguri",system-ui,sans-serif;line-height:1.6}
-h1,h2,.word{font-family:"Literata",Georgia,serif}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hind Siliguri",system-ui,sans-serif;line-height:1.7}
+h1,h2,h3,.word{font-family:"Literata",Georgia,serif}
 .hidden{display:none!important}
 
 /* Login */
@@ -30,32 +30,47 @@ button{font:inherit;font-weight:600;cursor:pointer;border:0;border-radius:8px;pa
 .primary{width:100%;margin-top:18px;background:var(--accent);color:var(--accent-ink)}
 #error{color:var(--err);min-height:1.5em;margin:10px 0 0}
 
+/* Layout */
+header{max-width:780px;margin:0 auto;padding:24px 20px 8px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+header h1{margin:0;font-size:1.7rem}
+.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+nav{max-width:780px;margin:0 auto;padding:8px 20px;display:flex;gap:8px;flex-wrap:wrap}
+nav button{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+nav button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+main{max-width:780px;margin:0 auto;padding:8px 20px 48px}
+
+/* Lesson */
+.lesson h2{font-size:1.5rem;margin:30px 0 8px}
+.lesson h3{font-size:1.15rem;margin:18px 0 4px}
+.card{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:14px 18px;margin:12px 0}
+.card p{margin:4px 0}
+.en{font-family:"Literata",Georgia,serif}
+.note{background:var(--soft);border:1px dashed var(--accent);border-radius:10px;padding:12px 16px;margin:12px 0}
+.eg{color:var(--muted);font-style:italic}
+.marks{display:flex;gap:10px;margin:8px 0}
+.marks span{font-family:"Literata",serif;font-size:1.6rem;font-weight:700;width:48px;height:48px;display:grid;place-items:center;background:var(--card);border:2px solid var(--accent);border-radius:50%}
+.marks small{display:block;font-family:"Hind Siliguri",sans-serif;font-size:.7rem;font-weight:500;text-align:center;color:var(--muted)}
+.flow{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
+.flow div{flex:1;min-width:150px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center;font-weight:600}
+
 /* Vocabulary */
-header{max-width:760px;margin:0 auto;padding:28px 20px 8px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-header h1{margin:0;font-size:1.9rem}
-header p{margin:4px 0 0;color:var(--muted)}
-.logout{background:transparent;color:var(--ink);border:1px solid var(--line)}
-.tools{max-width:760px;margin:0 auto;padding:8px 20px;display:flex;gap:10px;flex-wrap:wrap}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
 .tools input{flex:1;min-width:200px}
 .tools .toggle{background:var(--card);color:var(--ink);border:1px solid var(--line)}
-main{max-width:760px;margin:0 auto;padding:8px 20px 40px}
-.entry{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:14px 18px;margin:12px 0}
-.word{font-size:1.35rem;font-weight:700}
+.word{font-size:1.3rem;font-weight:700}
 .pos{color:var(--muted);font-style:italic;margin-left:8px;font-size:.95rem}
-.def{margin:2px 0}
 .bn{font-weight:500}
-.ex{color:var(--muted);margin:4px 0 0}
 .meanings-off .def,.meanings-off .bn{filter:blur(6px);cursor:pointer;user-select:none}
 .meanings-off .entry.reveal .def,.meanings-off .entry.reveal .bn{filter:none}
-#count{max-width:760px;margin:0 auto;padding:0 20px;color:var(--muted)}
+#count{color:var(--muted);margin:4px 0}
 </style>
 </head>
 <body>
 
 <section id="login">
   <div class="box">
-    <h1>Vocabulary</h1>
-    <p>Sign in to see the word list.</p>
+    <h1>English Class</h1>
+    <p>Sign in to open your lessons.</p>
     <label for="uid">ID</label>
     <input id="uid" autocomplete="username">
     <label for="pw">Password</label>
@@ -67,24 +82,82 @@ main{max-width:760px;margin:0 auto;padding:8px 20px 40px}
 
 <section id="app" class="hidden">
   <header>
-    <div>
-      <h1>Essential English Vocabulary</h1>
-      <p>20 words every learner should know</p>
-    </div>
-    <button class="logout" id="logoutBtn">Sign out</button>
+    <h1>English Class</h1>
+    <button class="ghost" id="logoutBtn">Sign out</button>
   </header>
-  <div class="tools">
-    <input id="search" type="search" placeholder="Search a word or Bengali meaning" aria-label="Search words">
-    <button class="toggle" id="toggleBtn">Hide meanings</button>
+  <nav role="tablist">
+    <button role="tab" id="tab-class1" aria-selected="true" data-tab="class1">Class 1: Sentence &amp; Clause</button>
+    <button role="tab" id="tab-vocab" aria-selected="false" data-tab="vocab">Vocabulary</button>
+  </nav>
+
+  <main>
+  <!-- ===== CLASS 1 ===== -->
+  <div id="class1" class="lesson">
+    <h2>Sentence</h2>
+    <div class="card">
+      <p class="en">The part of a text that comes immediately before a sentence-ending punctuation mark is called a sentence.</p>
+      <p>Sentence ending punctuation হলো তিনটি:</p>
+      <div class="marks">
+        <div><span>.</span><small>Full stop<br>ফুলস্টপ</small></div>
+        <div><span>?</span><small>Question mark<br>প্রশ্নবোধক</small></div>
+        <div><span>!</span><small>Exclamation<br>আশ্চর্যবোধক</small></div>
+      </div>
+    </div>
+
+    <h2>Types of sentences</h2>
+    <p class="en">There are three types of sentences based on the structure of a sentence.</p>
+
+    <div class="card">
+      <h3>1. Simple Sentence</h3>
+      <p>যেই বাক্যে মাত্র একটা Independent Clause থাকবে এবং কোনো Dependent Clause থাকবে না, সেটা Simple Sentence।</p>
+      <p class="eg">Example: I like tea.</p>
+    </div>
+    <div class="card">
+      <h3>2. Compound Sentence</h3>
+      <p>কোনো Dependent Clause থাকবে না, কিন্তু Independent Clause-এর সংখ্যা একের বেশি হবে।</p>
+      <p class="eg">Example: I like tea, and she likes coffee.</p>
+    </div>
+    <div class="card">
+      <h3>3. Complex Sentence</h3>
+      <p>Dependent Clause থাকলেই সেটা Complex Sentence হবে। Complex Sentence-এ Independent Clause একটাও থাকতে পারে, একের বেশিও থাকতে পারে।</p>
+      <p class="eg">Example: I like tea because it is warm.</p>
+    </div>
+
+    <h2>Clause</h2>
+    <div class="card">
+      <p class="en">A clause is a part of a sentence that can also be used as a complete sentence.</p>
+      <p class="en">Clauses are basically of two types:</p>
+      <div class="flow"><div>Independent Clause</div><div>Dependent Clause</div></div>
+    </div>
+
+    <div class="note">
+      <strong>Independent Clause চেনার উপায়:</strong> যদি কোনো Clause-কে সহজভাবে কেটে নিয়ে একটা ফুলস্টপ দিয়ে বসিয়ে দেওয়া যায়, তবে তাকে Independent Clause বলে।
+    </div>
+
+    <h3>Three types of Dependent Clause</h3>
+    <div class="flow"><div>Adjective Clause</div><div>Adverb Clause</div><div>Noun Clause</div></div>
+
+    <h2>Clause is the head of the sentence</h2>
+    <div class="card">
+      <p class="en">As we see, a sentence is basically controlled by different clauses, so a clause is called the head of the sentence.</p>
+      <p class="en">When a clause is reduced, it turns into a phrase. Unfortunately, a phrase has no control over the structure of the sentence.</p>
+    </div>
   </div>
-  <p id="count"></p>
-  <main id="list"></main>
+
+  <!-- ===== VOCABULARY ===== -->
+  <div id="vocab" class="hidden">
+    <div class="tools">
+      <input id="search" type="search" placeholder="Search a word or Bengali meaning" aria-label="Search words">
+      <button class="toggle" id="toggleBtn">Hide meanings</button>
+    </div>
+    <p id="count"></p>
+    <div id="list"></div>
+  </div>
+  </main>
 </section>
 
 <script>
-/* ===== Change login here =====
-   The hash below is for ID "student" and password "vocab123".
-   See the instructions to make your own hash. */
+/* The hash below is for ID "student" and password "vocab123". */
 const LOGIN_HASH = "71bb023a87d04168df88ed79d2a6ecb2f884172b165268f9a2457fcadef01124";
 
 const WORDS = [
@@ -120,15 +193,13 @@ async function sha256(text){
 function show(loggedIn){
   $("login").classList.toggle("hidden", loggedIn);
   $("app").classList.toggle("hidden", !loggedIn);
-  if(loggedIn) render();
+  if(loggedIn) renderWords();
 }
 
 async function login(){
-  const id = $("uid").value.trim();
-  const pw = $("pw").value;
-  const hash = await sha256(id + ":" + pw);
+  const hash = await sha256($("uid").value.trim() + ":" + $("pw").value);
   if(hash === LOGIN_HASH){
-    try{ sessionStorage.setItem("vocab_ok","1"); }catch(e){}
+    try{ sessionStorage.setItem("class_ok","1"); }catch(e){}
     $("error").textContent = "";
     $("pw").value = "";
     show(true);
@@ -137,27 +208,35 @@ async function login(){
   }
 }
 
-function render(){
+function renderWords(){
   const q = $("search").value.trim().toLowerCase();
   const items = WORDS.filter(w => w.join(" ").toLowerCase().includes(q));
   $("count").textContent = items.length + " of " + WORDS.length + " words";
   $("list").innerHTML = items.length ? items.map(w => `
-    <article class="entry">
+    <article class="card entry">
       <div><span class="word">${w[0]}</span><span class="pos">${w[1]}</span></div>
       <p class="def">${w[2]}</p>
       <p class="bn">${w[3]}</p>
-      <p class="ex">“${w[4]}”</p>
+      <p class="eg">“${w[4]}”</p>
     </article>`).join("") : "<p>No word found.</p>";
+}
+
+function openTab(name){
+  ["class1","vocab"].forEach(t => {
+    $(t).classList.toggle("hidden", t !== name);
+    $("tab-" + t).setAttribute("aria-selected", t === name);
+  });
 }
 
 $("loginBtn").addEventListener("click", login);
 $("pw").addEventListener("keydown", e => { if(e.key === "Enter") login(); });
 $("uid").addEventListener("keydown", e => { if(e.key === "Enter") $("pw").focus(); });
 $("logoutBtn").addEventListener("click", () => {
-  try{ sessionStorage.removeItem("vocab_ok"); }catch(e){}
+  try{ sessionStorage.removeItem("class_ok"); }catch(e){}
   show(false);
 });
-$("search").addEventListener("input", render);
+document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => openTab(b.dataset.tab)));
+$("search").addEventListener("input", renderWords);
 $("toggleBtn").addEventListener("click", () => {
   const off = $("list").classList.toggle("meanings-off");
   $("toggleBtn").textContent = off ? "Show meanings" : "Hide meanings";
@@ -168,7 +247,7 @@ $("list").addEventListener("click", e => {
 });
 
 let ok = false;
-try{ ok = sessionStorage.getItem("vocab_ok") === "1"; }catch(e){}
+try{ ok = sessionStorage.getItem("class_ok") === "1"; }catch(e){}
 show(ok);
 </script>
 </body>
