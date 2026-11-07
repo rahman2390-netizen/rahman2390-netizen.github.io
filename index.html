@@ -5,78 +5,153 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Learn With Naznin</title>
 <style>
-:root{--bg:#f6f4ff;--card:#fff;--tx:#1f1b2e;--mu:#6b6785;--ac:#6c4ff0;--bd:#e3dffa;--tip:#fff7df}
-@media (prefers-color-scheme:dark){:root{--bg:#14121f;--card:#1e1b2e;--tx:#ece9fb;--mu:#a29fbd;--ac:#9a84ff;--bd:#322e4d;--tip:#2e2916}}
+:root{
+  --bg:#f6f4ff;--card:#fff;--tx:#1f1b2e;--mu:#6b6785;--ac:#6c4ff0;
+  --bd:#e3dffa;--tip:#fff7df;--ok:#10b981;--err:#ef4444;--warn:#f59e0b;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#14121f;--card:#1e1b2e;--tx:#ece9fb;--mu:#a29fbd;--ac:#9a84ff;
+    --bd:#322e4d;--tip:#2e2916;--ok:#34d399;--err:#f87171;--warn:#fbbf24;
+  }
+}
 *{box-sizing:border-box}
 body{margin:0;font-family:system-ui,"Noto Sans Bengali",sans-serif;background:var(--bg);color:var(--tx);line-height:1.55}
 header{text-align:center;padding:22px 12px 8px}
-h1{margin:0;font-size:clamp(26px,6vw,38px);color:var(--ac)}
+h1{margin:0;font-size:clamp(24px,5vw,36px);color:var(--ac)}
 header p{margin:4px 0 0;color:var(--mu)}
-.bar{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 12px;display:flex;gap:8px;flex-wrap:wrap;max-width:860px;margin:auto}
-.bar input{flex:1 1 220px;padding:11px 14px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx);font-size:16px}
-button{cursor:pointer;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:10px 14px;border-radius:12px;font-size:15px}
+.bar{position:sticky;top:0;z-index:10;background:var(--bg);padding:10px 12px;display:flex;gap:8px;flex-wrap:wrap;max-width:860px;margin:auto}
+.bar input{flex:1 1 200px;padding:11px 14px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx);font-size:15px}
+button{cursor:pointer;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:10px 14px;border-radius:12px;font-size:14px;font-weight:500;transition:.15s}
+button:hover{border-color:var(--ac)}
 button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+button.btn-exam{background:#6c4ff0;color:#fff;border-color:#6c4ff0}
+button.btn-exam:hover{opacity:.9}
 main{max-width:860px;margin:auto;padding:6px 12px 40px}
 .count{color:var(--mu);font-size:14px;margin:4px 2px 10px}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;margin-bottom:14px}
 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
 .w{font-size:24px;font-weight:700;color:var(--ac)}
 .pr{color:var(--mu);font-style:italic}.pos{font-size:13px;color:var(--mu)}
-.star{font-size:26px;line-height:1;padding:6px 10px;color:var(--mu)}
+.star{font-size:24px;line-height:1;padding:6px 10px;color:var(--mu)}
 .star.f{color:#f5a623;border-color:#f5a623}
 .lb{font-weight:700;margin-top:8px;font-size:14px;color:var(--ac)}
 .tip{background:var(--tip);border-radius:10px;padding:8px 12px;margin-top:10px}
-.hide .bn{display:none}
 .num{font-size:12px;color:var(--mu)}
 .empty{text-align:center;color:var(--mu);padding:30px}
-#login{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:20}
+
+/* সব মিনিং হাইড করার স্টাইল */
+.hide-all-meanings .mean-hide{display:none !important}
+.hide-hint{display:none;color:var(--mu);font-style:italic;padding:8px 0;font-size:13px}
+.hide-all-meanings .hide-hint{display:block}
+
+/* লগইন */
+#login{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:30}
 #login form{background:var(--card);border:1px solid var(--bd);padding:26px;border-radius:18px;width:min(340px,92vw);display:grid;gap:10px;text-align:center}
 #login input{padding:11px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font-size:16px}
 #err{color:#d33;font-size:14px;min-height:18px}
+
+/* এক্সাম মোড স্টাইল */
+#exam-view, #result-view{max-width:860px;margin:auto;padding:10px 12px 50px}
+.exam-bar{position:sticky;top:0;z-index:15;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:12px 16px;margin:10px 0 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;box-shadow:0 4px 15px rgba(0,0,0,.04)}
+.timer{font-size:20px;font-weight:700;color:var(--ac);font-family:monospace}
+.timer.danger{color:var(--err);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.5}}
+.q-card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;margin-bottom:14px}
+.q-title{font-size:18px;font-weight:700;color:var(--tx);margin-bottom:12px}
+.q-title span{color:var(--ac)}
+.opts{display:grid;gap:8px}
+.opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--bd);border-radius:12px;cursor:pointer;transition:.15s;background:var(--bg)}
+.opt:hover{border-color:var(--ac)}
+.opt input{accent-color:var(--ac);cursor:pointer;width:18px;height:18px;margin:0}
+.opt.selected{border-color:var(--ac);background:rgba(108,79,240,.08)}
+
+/* রেজাল্ট শিট */
+.res-card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:22px;text-align:center;margin-bottom:20px}
+.res-score{font-size:38px;font-weight:800;color:var(--ac);margin:10px 0}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:18px 0}
+.res-box{padding:12px;border-radius:12px;border:1px solid var(--bd);background:var(--bg)}
+.res-box .num-val{font-size:22px;font-weight:700}
+.c-ok{color:var(--ok)} .c-err{color:var(--err)} .c-warn{color:var(--warn)}
+
+/* রিভিউ মোড */
+.rev-item{border-left:5px solid var(--bd);padding:14px;border-radius:12px;background:var(--card);border-top:1px solid var(--bd);border-right:1px solid var(--bd);border-bottom:1px solid var(--bd);margin-bottom:12px}
+.rev-item.is-correct{border-left-color:var(--ok)}
+.rev-item.is-wrong{border-left-color:var(--err)}
+.rev-item.is-skipped{border-left-color:var(--warn)}
+.badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:12px;font-weight:600;margin-bottom:6px}
+.b-ok{background:rgba(16,185,129,.15);color:var(--ok)}
+.b-err{background:rgba(239,68,68,.15);color:var(--err)}
+.b-warn{background:rgba(245,158,11,.15);color:var(--warn)}
 </style>
 </head>
 <body>
+
 <div id="login"><form id="lf">
 <h2 style="margin:0;color:var(--ac)">Learn With Naznin</h2>
 <input id="uid" placeholder="ID" autocomplete="username">
 <input id="pw" type="password" placeholder="Password" autocomplete="current-password">
 <button class="on" type="submit">প্রবেশ করুন</button><div id="err"></div></form></div>
 
+<!-- স্টাডি অ্যাপ মোড -->
 <div id="app" style="display:none">
 <header><h1>Learn With Naznin</h1><p>English Word Meaning Learning</p></header>
 <div class="bar">
 <input id="q" type="search" placeholder="🔍 শব্দ বা অর্থ খুঁজুন...">
-<button id="hb">বাংলা Hide</button>
+<button id="hb">অর্থ Hide</button>
 <button id="fb">⭐ Favourite</button>
+<button id="btn-start-exam" class="btn-exam">📝 এক্সাম দিন</button>
 <button id="lo">Logout</button>
 </div>
 <main><div class="count" id="ct"></div><div id="list"></div></main>
 </div>
 
+<!-- এক্সাম মোড ভিউ -->
+<div id="exam-view" style="display:none">
+  <div class="exam-bar">
+    <div>
+      <div style="font-size:13px;color:var(--mu)">সময় বাকি (৪০ মিনিট)</div>
+      <div class="timer" id="timer-text">40:00</div>
+    </div>
+    <div style="font-size:14px;color:var(--mu)" id="ans-progress">উত্তর দেওয়া হয়েছে: 0 / 100</div>
+    <div>
+      <button class="btn-exam" id="btn-submit-exam">পরীক্ষা জমা দিন (Submit)</button>
+    </div>
+  </div>
+  <div id="exam-questions-list"></div>
+  <div style="text-align:center;padding:20px 0">
+    <button class="btn-exam" style="font-size:16px;padding:12px 24px" id="btn-submit-exam-bottom">পরীক্ষা জমা দিন (Submit)</button>
+  </div>
+</div>
+
+<!-- রেজাল্ট ও রিভিউ ভিউ -->
+<div id="result-view" style="display:none">
+  <div class="res-card">
+    <h2 style="margin:0;color:var(--ac)">পরীক্ষার ফলাফল</h2>
+    <div class="res-score" id="res-score-text">0 / 100</div>
+    <p id="res-msg" style="color:var(--mu);margin:0 0 10px"></p>
+    <div class="res-grid">
+      <div class="res-box"><div style="font-size:13px;color:var(--mu)">সঠিক উত্তর</div><div class="num-val c-ok" id="r-ok">0</div></div>
+      <div class="res-box"><div style="font-size:13px;color:var(--mu)">ভুল উত্তর</div><div class="num-val c-err" id="r-err">0</div></div>
+      <div class="res-box"><div style="font-size:13px;color:var(--mu)">উত্তর দেননি</div><div class="num-val c-warn" id="r-skip">0</div></div>
+      <div class="res-box"><div style="font-size:13px;color:var(--mu)">সময় লেগেছে</div><div class="num-val" id="r-time" style="font-size:17px;padding-top:4px">00:00</div></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="btn-exam" id="btn-retake">🔄 আবার পরীক্ষা দিন</button>
+      <button id="btn-back-words">📖 শব্দ তালিকায় ফিরে যান</button>
+    </div>
+  </div>
+  <h3 style="margin:20px 0 10px;color:var(--ac)">ভুল ও সঠিক উত্তর যাচাই (Review)</h3>
+  <div id="review-list"></div>
+</div>
+
 <script>
-// ===== লগইন (ID/Password বদলাতে নিচের README দেখুন) =====
 const USER_ID="naznin", PASS_HASH="3ab1a878c89b5baf99fb61af469c3dcde4f13e2ef1b4442e78a4c0dff24ffa4b";
-// ===== শব্দের ডাটা: নতুন শব্দ যোগ করতে এই তালিকায় একই ফরম্যাটে লিখুন =====
+
 const DATA=[
-{n:1,w:"Luminous",p:"লূমিনাস",pos:"adjective",
- syn:"Radiant (দীপ্তিমান), Dazzling (চোখধাঁধানো), Glowing (অনুরঞ্জিত), Lucid (স্বচ্ছ, নির্মল), Vivid (স্পষ্ট, উজ্জ্বল)",
- ant:"Dark (অন্ধকার), Dim (আবছা), Dull (নিস্তেজ), Gloomy (বিষণ্ণ), Shadowy (ছায়াময়)",
- en:"Softly bright or radiant.",bn:"আলোকোজ্জ্বল; উজ্জ্বল; (লাক্ষণিক) স্পষ্ট; সহজবোধ্য।",
- ex:["The moon was full, and gave off a luminous blue glow.","I saw the cat's luminous eyes in my car's headlights."],
- tip:"Luminous ≈ লুমিনাস → \"লুমিনাস\" শুনলেই মনে করো Illuminate (আলোকিত করা) — যা আলো ছড়ায়, সেটাই Luminous।"},
-{n:2,w:"Veracious",p:"ভারেইশাস",pos:"adjective",
- syn:"Exact (যথাযথ), Literal (আক্ষরিক), Faithful (বিশ্বস্ত), Honest (সৎ), Truthful (সত্যপরায়ণ; সত্যবাদী)",
- ant:"Untrue (অসত্য), Dishonest (অসৎ), Improper (অনুপযুক্ত), Fraudulent (প্রতারণামূলক), Mendacious (দুষ্টু)",
- en:"Precisely accurate; habitually speaking the truth.",bn:"সত্য; যথার্থ; সত্যপরায়ণ; সত্যসন্ধ; সত্যনিষ্ঠ; সত্যবাদী।",
- ex:["We are the more pleased to have its authenticity vouched for by this veracious witness.","It is such a rarity to discover an album that is held together by songs of veracious beauty."],
- tip:"Veracious-এর শুরুতে Ver = Very/সত্য (Verify, Verdict-এও সত্যের ইঙ্গিত)। Ver → সত্য মনে রাখো।"},
-{n:3,w:"Euphemism",p:"ইউফামিজাম",pos:"countable & uncountable noun",
- syn:"Softening (নরম করা), Politeness (শিষ্টতা), Pomposity (বাগাড়ম্বর), Delicacy (মাধুর্যময় কথা)",
- ant:"Straightforwardness (সোজাসাপ্টা কথা), Directness (সরাসরি কথা বলা)",
- en:"A word or phrase used to avoid saying an unpleasant or offensive word.",
- bn:"সুভাষণ; সত্যিকার শব্দের পরিবর্তে অন্য কোনো শব্দের ব্যবহার; যেমন - 'মৃত্যু' শব্দের বদলে 'পরলোকগমন' বাক্যাংশের ব্যবহার।",
- ex:["She wants to reclaim the word old and rejects euphemisms like elderly and seniors.","The story is patient, which some may find a euphemism for slow."],
- tip:"Eu = ভালো (Euphoria = ভালো অনুভূতি) + phemism = কথা → ভালো করে বলা কথা = সুভাষণ।"},
+{n:1,w:"Luminous",p:"লূমিনাস",pos:"adjective",syn:"Radiant (দীপ্তিমান), Dazzling (চোখধাঁধানো), Glowing (অনুরঞ্জিত), Lucid (স্বচ্ছ, নির্মল), Vivid (স্পষ্ট, উজ্জ্বল)",ant:"Dark (অন্ধকার), Dim (আবছা), Dull (নিস্তেজ), Gloomy (বিষণ্ণ), Shadowy (ছায়াময়)",en:"Softly bright or radiant.",bn:"আলোকোজ্জ্বল; উজ্জ্বল; (লাক্ষণিক) স্পষ্ট; সহজবোধ্য।",ex:["The moon was full, and gave off a luminous blue glow.","I saw the cat's luminous eyes in my car's headlights."],tip:"Luminous ≈ লুমিনাস → \"লুমিনাস\" শুনলেই মনে করো Illuminate (আলোকিত করা) — যা আলো ছড়ায়, সেটাই Luminous।"},
+{n:2,w:"Veracious",p:"ভারেইশাস",pos:"adjective",syn:"Exact (যথাযথ), Literal (আক্ষরিক), Faithful (বিশ্বস্ত), Honest (সৎ), Truthful (সত্যপরায়ণ; সত্যবাদী)",ant:"Untrue (অসত্য), Dishonest (অসৎ), Improper (অনুপযুক্ত), Fraudulent (প্রতারণামূলক), Mendacious (দুষ্টু)",en:"Precisely accurate; habitually speaking the truth.",bn:"সত্য; যথার্থ; সত্যপরায়ণ; সত্যসন্ধ; সত্যনিষ্ঠ; সত্যবাদী।",ex:["We are the more pleased to have its authenticity vouched for by this veracious witness.","It is such a rarity to discover an album that is held together by songs of veracious beauty."],tip:"Veracious-এর শুরুতে Ver = Very/সত্য (Verify, Verdict-এও সত্যের ইঙ্গিত)। Ver → সত্য মনে রাখো।"},
+{n:3,w:"Euphemism",p:"ইউফামিজাম",pos:"countable & uncountable noun",syn:"Softening (নরম করা), Politeness (শিষ্টতা), Pomposity (বাগাড়ম্বর), Delicacy (মাধুর্যময় কথা)",ant:"Straightforwardness (সোজাসাপ্টা কথা), Directness (সরাসরি কথা বলা)",en:"A word or phrase used to avoid saying an unpleasant or offensive word.",bn:"সুভাষণ; সত্যিকার শব্দের পরিবর্তে অন্য কোনো শব্দের ব্যবহার; যেমন - 'মৃত্যু' শব্দের বদলে 'পরলোকগমন' বাক্যাংশের ব্যবহার।",ex:["She wants to reclaim the word old and rejects euphemisms like elderly and seniors.","The story is patient, which some may find a euphemism for slow."],tip:"Eu = ভালো (Euphoria = ভালো অনুভূতি) + phemism = কথা → ভালো করে বলা কথা = সুভাষণ।"},
 {"n": 4, "w": "Equivocate", "p": "ইকুইভোকেট", "pos": "verb", "en": "To use vague words to avoid giving a clear answer.", "bn": "বাক্‌চাতুরী করা; ঘুরিয়ে বলে এড়িয়ে যাওয়া।", "ex": ["The applicant seemed to be equivocating when we asked about his last job."], "tip": "Equi = সমান + voc = কণ্ঠ → দুই রকম অর্থের কথা বলা।"},
 {"n": 5, "w": "Apathy", "p": "অ্যাপাথি", "pos": "noun", "en": "Lack of interest or concern.", "bn": "উদাসীনতা; অনীহা।", "ex": ["People have shown surprising apathy toward these social problems."], "tip": "A (নেই) + pathy (অনুভূতি, sympathy-র মতো) → অনুভূতি নেই = উদাসীনতা।"},
 {"n": 6, "w": "Recalcitrant", "p": "রিক্যালসিট্র্যান্ট", "pos": "adjective", "en": "Stubbornly unwilling to obey.", "bn": "অবাধ্য; একগুঁয়ে।", "ex": ["The manager worried the recalcitrant employee would undermine his authority."], "tip": "Re + calc (গোড়ালি) → গোড়ালি দিয়ে লাথি মারে = অবাধ্য।"},
@@ -178,27 +253,235 @@ const DATA=[
 
 const $=s=>document.querySelector(s);
 let favs=[];try{favs=JSON.parse(localStorage.getItem("naznin_favs")||"[]")}catch(e){}
-let hideBn=false,onlyFav=false;
+let hideAllMean=false,onlyFav=false;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function saveFavs(){try{localStorage.setItem("naznin_favs",JSON.stringify(favs))}catch(e){}}
+
+// স্টাডি ভিউ রেন্ডার
 function render(){
  const q=$("#q").value.trim().toLowerCase();
  const rows=DATA.filter(d=>(!onlyFav||favs.includes(d.n))&&(!q||JSON.stringify(d).toLowerCase().includes(q)));
  $("#ct").textContent=rows.length+" টি শব্দ";
  $("#list").innerHTML=rows.length?rows.map(d=>`<div class="card">
- <div class="top"><div><div class="num">Word No: ${d.n}</div><span class="w">${esc(d.w)}</span> <span class="pr bn">[${esc(d.p)}]</span><div class="pos">${esc(d.pos)}</div></div>
+ <div class="top"><div><div class="num">Word No: ${d.n}</div><span class="w">${esc(d.w)}</span> <span class="pr mean-hide">[${esc(d.p)}]</span><div class="pos">${esc(d.pos)}</div></div>
  <button class="star ${favs.includes(d.n)?"f":""}" data-n="${d.n}" aria-label="favourite">${favs.includes(d.n)?"★":"☆"}</button></div>
- <div class="lb">English Meaning</div><div>${esc(d.en)}</div>
- <div class="lb bn">বাংলা অর্থ</div><div class="bn">${esc(d.bn)}</div>
- ${d.syn?`<div class="lb">Synonyms</div><div>${hideBn?esc(d.syn.replace(/\s*\([^)]*\)/g,"")):esc(d.syn)}</div>`:""}
- ${d.ant?`<div class="lb">Antonyms</div><div>${hideBn?esc(d.ant.replace(/\s*\([^)]*\)/g,"")):esc(d.ant)}</div>`:""}
+ 
+ <div class="hide-hint">🙈 <i>অর্থ হাইড করা আছে (মনে করার চেষ্টা করুন)</i></div>
+ 
+ <div class="mean-hide">
+   <div class="lb">English Meaning</div><div>${esc(d.en)}</div>
+   <div class="lb">বাংলা অর্থ</div><div>${esc(d.bn)}</div>
+   ${d.syn?`<div class="lb">Synonyms</div><div>${esc(d.syn)}</div>`:""}
+   ${d.ant?`<div class="lb">Antonyms</div><div>${esc(d.ant)}</div>`:""}
+ </div>
+ 
  <div class="lb">Example</div>${d.ex.map((e,i)=>`<div><i>${i+1}. ${esc(e)}</i></div>`).join("")}
- <div class="tip bn">💡 <b>মনে রাখার কৌশল:</b> ${esc(d.tip)}</div></div>`).join(""):'<div class="empty">কোনো শব্দ পাওয়া যায়নি</div>';
+ <div class="tip mean-hide">💡 <b>মনে রাখার কৌশল:</b> ${esc(d.tip)}</div></div>`).join(""):'<div class="empty">কোনো শব্দ পাওয়া যায়নি</div>';
 }
+
 $("#q").oninput=render;
-$("#hb").onclick=()=>{hideBn=!hideBn;document.body.classList.toggle("hide",hideBn);$("#hb").classList.toggle("on",hideBn);$("#hb").textContent=hideBn?"বাংলা Show":"বাংলা Hide";render()};
+
+// অর্থ Hide বাটন লজিক (বাংলা ও ইংরেজি উভয়ই হাইড হবে)
+$("#hb").onclick=()=>{
+  hideAllMean=!hideAllMean;
+  document.body.classList.toggle("hide-all-meanings", hideAllMean);
+  $("#hb").classList.toggle("on", hideAllMean);
+  $("#hb").textContent = hideAllMean ? "অর্থ Show" : "অর্থ Hide";
+  render();
+};
+
 $("#fb").onclick=()=>{onlyFav=!onlyFav;$("#fb").classList.toggle("on",onlyFav);render()};
 $("#list").onclick=e=>{const b=e.target.closest(".star");if(!b)return;const n=+b.dataset.n;favs=favs.includes(n)?favs.filter(x=>x!==n):[...favs,n];saveFavs();render()};
+
+// ================= এক্সাম সিস্টেম =================
+let examQuestions = [];
+let examTimer = null;
+let timeLeft = 40 * 60; // ৪০ মিনিট = ২৪০০ সেকেন্ড
+let totalExamSeconds = 40 * 60;
+
+function startExam(){
+  if(!confirm("আপনি কি ৪০ মিনিটের ১০০ শব্দের পরীক্ষা শুরু করতে চান?")) return;
+  
+  // প্রশ্ন ও অপশন তৈরি (১টি সঠিক + ৩টি র‍্যান্ডম ডিস্ট্রাক্টর)
+  examQuestions = DATA.map((item, idx) => {
+    const distractors = DATA.filter(x => x.n !== item.n)
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 3)
+      .map(x => ({ text: x.bn, isCorrect: false }));
+    
+    const options = [
+      { text: item.bn, isCorrect: true },
+      ...distractors
+    ].sort(() => 0.5 - Math.random());
+
+    return {
+      qNum: idx + 1,
+      wordItem: item,
+      options: options,
+      selectedIndex: null
+    };
+  });
+
+  // স্ক্রিন সুইচ
+  $("#app").style.display = "none";
+  $("#result-view").style.display = "none";
+  $("#exam-view").style.display = "block";
+  window.scrollTo({top:0, behavior:'smooth'});
+
+  renderExamQuestions();
+  updateProgress();
+
+  // টাইমার সেট
+  timeLeft = totalExamSeconds;
+  clearInterval(examTimer);
+  updateTimerDisplay();
+  examTimer = setInterval(()=>{
+    timeLeft--;
+    updateTimerDisplay();
+    if(timeLeft <= 0){
+      clearInterval(examTimer);
+      alert("⏰ সময় শেষ! আপনার পরীক্ষা স্বয়ংক্রিয়ভাবে জমা নেওয়া হচ্ছে।");
+      finishExam();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay(){
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  const str = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+  const tEl = $("#timer-text");
+  tEl.textContent = str;
+  if(timeLeft <= 300) tEl.classList.add("danger"); // শেষ ৫ মিনিট লাল হবে
+  else tEl.classList.remove("danger");
+}
+
+function renderExamQuestions(){
+  const html = examQuestions.map((q, qIdx) => `
+    <div class="q-card" id="qc-${qIdx}">
+      <div class="q-title">প্রশ্ন ${q.qNum}: <span>${esc(q.wordItem.w)}</span> <small style="font-weight:normal;color:var(--mu)">(${esc(q.wordItem.pos)})</small></div>
+      <div style="font-size:13px;color:var(--mu);margin-bottom:8px">সঠিক অর্থ কোনটি?</div>
+      <div class="opts">
+        ${q.options.map((opt, oIdx) => `
+          <label class="opt ${q.selectedIndex === oIdx ? 'selected' : ''}" onclick="selectExamOpt(${qIdx}, ${oIdx})">
+            <input type="radio" name="q_${qIdx}" ${q.selectedIndex === oIdx ? 'checked' : ''}>
+            <span>${esc(opt.text)}</span>
+          </label>
+        `).join("")}
+      </div>
+    </div>
+  `).join("");
+  $("#exam-questions-list").innerHTML = html;
+}
+
+window.selectExamOpt = (qIdx, oIdx) => {
+  examQuestions[qIdx].selectedIndex = oIdx;
+  const card = $(`#qc-${qIdx}`);
+  if(card){
+    const labels = card.querySelectorAll(".opt");
+    labels.forEach((l, i) => l.classList.toggle("selected", i === oIdx));
+    const input = labels[oIdx].querySelector("input");
+    if(input) input.checked = true;
+  }
+  updateProgress();
+};
+
+function updateProgress(){
+  const answered = examQuestions.filter(q => q.selectedIndex !== null).length;
+  $("#ans-progress").textContent = `উত্তর দেওয়া হয়েছে: ${answered} / ${examQuestions.length}`;
+}
+
+function submitWithConfirm(){
+  const answered = examQuestions.filter(q => q.selectedIndex !== null).length;
+  const unanswered = examQuestions.length - answered;
+  let msg = "আপনি কি নিশ্চিত যে পরীক্ষা জমা দিতে চান?";
+  if(unanswered > 0){
+    msg = `আপনি এখনো ${unanswered}টি প্রশ্নের উত্তর দেননি!\nতবুও কি জমা দিতে চান?`;
+  }
+  if(confirm(msg)){
+    finishExam();
+  }
+}
+
+function finishExam(){
+  clearInterval(examTimer);
+  const timeTakenSec = totalExamSeconds - timeLeft;
+  const m = Math.floor(timeTakenSec / 60);
+  const s = timeTakenSec % 60;
+  const timeTakenStr = `${m} মি. ${s} সে.`;
+
+  let correctCount = 0;
+  let wrongCount = 0;
+  let skippedCount = 0;
+
+  examQuestions.forEach(q => {
+    if(q.selectedIndex === null){
+      skippedCount++;
+    } else if(q.options[q.selectedIndex].isCorrect){
+      correctCount++;
+    } else {
+      wrongCount++;
+    }
+  });
+
+  const score = correctCount; // প্রতি সঠিক উত্তরে ১ মার্ক
+
+  // রেজাল্ট সামারি আপডেট
+  $("#res-score-text").textContent = `${score} / 100`;
+  $("#r-ok").textContent = correctCount;
+  $("#r-err").textContent = wrongCount;
+  $("#r-skip").textContent = skippedCount;
+  $("#r-time").textContent = timeTakenStr;
+
+  let feedback = "";
+  if(score >= 80) feedback = "অসাধারণ পারফরম্যান্স! আপনার প্রস্তুতি খুবই ভালো। 🎉";
+  else if(score >= 50) feedback = "ভালো হয়েছে! আরেকটু প্র্যাকটিস করলে আরো উন্নতি হবে। 👍";
+  else feedback = "আরো একটু রিভিশন দিন এবং পুনরায় পরীক্ষা দিন। লেগে থাকুন! 📚";
+  $("#res-msg").textContent = feedback;
+
+  // রিভিউ তালিকা তৈরি
+  $("#review-list").innerHTML = examQuestions.map(q => {
+    const isSkipped = q.selectedIndex === null;
+    const isCorrect = !isSkipped && q.options[q.selectedIndex].isCorrect;
+    const statusClass = isCorrect ? "is-correct" : (isSkipped ? "is-skipped" : "is-wrong");
+    const statusBadge = isCorrect ? '<span class="badge b-ok">✓ সঠিক</span>' : (isSkipped ? '<span class="badge b-warn">⚠ উত্তর দেননি</span>' : '<span class="badge b-err">✗ ভুল</span>');
+
+    const correctOpt = q.options.find(o => o.isCorrect);
+    const userOpt = isSkipped ? null : q.options[q.selectedIndex];
+
+    return `
+      <div class="rev-item ${statusClass}">
+        ${statusBadge}
+        <div style="font-size:17px;font-weight:700;color:var(--tx)">${q.qNum}. ${esc(q.wordItem.w)} <small style="font-weight:normal;color:var(--mu)">[${esc(q.wordItem.p)}]</small></div>
+        <div style="font-size:13px;color:var(--mu);margin:2px 0 8px">English: ${esc(q.wordItem.en)}</div>
+        
+        ${!isSkipped ? `<div style="font-size:14px;margin-bottom:4px"><b>আপনার দেওয়া উত্তর:</b> <span class="${isCorrect?'c-ok':'c-err'}">${esc(userOpt.text)}</span></div>` : ""}
+        <div style="font-size:14px;color:var(--ok)"><b>সঠিক অর্থ:</b> ${esc(correctOpt.text)}</div>
+        
+        <div style="font-size:13px;color:var(--mu);margin-top:6px;background:var(--bg);padding:6px 10px;border-radius:8px">💡 <b>টিপস:</b> ${esc(q.wordItem.tip)}</div>
+      </div>
+    `;
+  }).join("");
+
+  // ভিউ সুইচ
+  $("#exam-view").style.display = "none";
+  $("#result-view").style.display = "block";
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+$("#btn-start-exam").onclick = startExam;
+$("#btn-submit-exam").onclick = submitWithConfirm;
+$("#btn-submit-exam-bottom").onclick = submitWithConfirm;
+$("#btn-retake").onclick = startExam;
+$("#btn-back-words").onclick = ()=>{
+  $("#result-view").style.display = "none";
+  $("#exam-view").style.display = "none";
+  $("#app").style.display = "block";
+  window.scrollTo({top:0, behavior:'smooth'});
+  render();
+};
+
+// ================= সিকিউরিটি ও লগইন =================
 function sha256(ascii){var rr=function(v,a){return(v>>>a)|(v<<(32-a))},mp=Math.pow,mw=mp(2,32),res="",words=[],bl=ascii.length*8,hash=[],k=[],pc=0,comp={},i,j;
 for(var c=2;pc<64;c++){if(!comp[c]){for(i=0;i<313;i+=c)comp[i]=c;hash[pc]=(mp(c,.5)*mw)|0;k[pc++]=(mp(c,1/3)*mw)|0}}
 ascii+="\x80";while(ascii.length%64-56)ascii+="\x00";
