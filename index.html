@@ -51,6 +51,15 @@ main{max-width:860px;margin:auto;padding:6px 12px 40px}
 #login input{padding:11px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font-size:16px}
 #err{color:#d33;font-size:14px;min-height:18px}
 
+/* এক্সাম সেকশন (ভাগ নির্বাচন) */
+#exam-select-view{max-width:860px;margin:auto;padding:20px 12px 50px}
+.exam-select-card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:22px;text-align:center}
+.exam-part-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:20px 0}
+.exam-part-btn{background:var(--bg);border:1px solid var(--bd);border-radius:14px;padding:16px;text-align:left;display:grid;gap:4px;transition:.15s}
+.exam-part-btn:hover{border-color:var(--ac);background:rgba(108,79,240,.08);transform:translateY(-2px)}
+.exam-part-title{font-size:17px;font-weight:700;color:var(--ac)}
+.exam-part-sub{font-size:13px;color:var(--mu)}
+
 /* এক্সাম মোড স্টাইল */
 #exam-view, #result-view{max-width:860px;margin:auto;padding:10px 12px 50px}
 .exam-bar{position:sticky;top:0;z-index:15;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:12px 16px;margin:10px 0 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;box-shadow:0 4px 15px rgba(0,0,0,.04)}
@@ -106,11 +115,21 @@ main{max-width:860px;margin:auto;padding:6px 12px 40px}
 <main><div class="count" id="ct"></div><div id="list"></div></main>
 </div>
 
+<!-- এক্সাম সেকশন (৫টি ভাগ) -->
+<div id="exam-select-view" style="display:none">
+  <div class="exam-select-card">
+    <h2 style="margin:0;color:var(--ac)">📝 এক্সাম সেকশন</h2>
+    <p style="color:var(--mu);margin:6px 0 0">মোট ৫২০টি শব্দকে ৫টি ভাগে ভাগ করা হয়েছে। যে ভাগের উপর পরীক্ষা দিতে চান তা নির্বাচন করুন:</p>
+    <div class="exam-part-grid" id="exam-part-grid"></div>
+    <button id="btn-select-back">← শব্দ তালিকায় ফিরে যান</button>
+  </div>
+</div>
+
 <!-- এক্সাম মোড ভিউ -->
 <div id="exam-view" style="display:none">
   <div class="exam-bar">
     <div>
-      <div style="font-size:13px;color:var(--mu)">সময় বাকি (৪০ মিনিট)</div>
+      <div style="font-size:13px;color:var(--mu)" id="exam-time-label">সময় বাকি (৪০ মিনিট)</div>
       <div class="timer" id="timer-text">40:00</div>
     </div>
     <div style="font-size:14px;color:var(--mu)" id="ans-progress">উত্তর দেওয়া হয়েছে: 0 / 100</div>
@@ -128,6 +147,7 @@ main{max-width:860px;margin:auto;padding:6px 12px 40px}
 <div id="result-view" style="display:none">
   <div class="res-card">
     <h2 style="margin:0;color:var(--ac)">পরীক্ষার ফলাফল</h2>
+    <div style="font-size:14px;color:var(--mu);margin-top:4px" id="res-part-label"></div>
     <div class="res-score" id="res-score-text">0 / 100</div>
     <p id="res-msg" style="color:var(--mu);margin:0 0 10px"></p>
     <div class="res-grid">
@@ -138,6 +158,7 @@ main{max-width:860px;margin:auto;padding:6px 12px 40px}
     </div>
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
       <button class="btn-exam" id="btn-retake">🔄 আবার পরীক্ষা দিন</button>
+      <button id="btn-other-part">📝 অন্য ভাগ নির্বাচন করুন</button>
       <button id="btn-back-words">📖 শব্দ তালিকায় ফিরে যান</button>
     </div>
   </div>
@@ -248,13 +269,433 @@ const DATA=[
 {"n": 97, "w": "Boorish", "p": "বোরিশ", "pos": "adjective", "en": "Rude and insensitive.", "bn": "অমার্জিত; অভদ্র।", "ex": ["His boorish behaviour shocked the guests."], "tip": "Boor = গেঁয়ো/চাষা → অভদ্র।"},
 {"n": 98, "w": "Homogeneous", "p": "হোমোজিনিয়াস", "pos": "adjective", "en": "Of the same kind.", "bn": "সমজাতীয়।", "ex": ["It is a homogeneous society."], "tip": "Homo = এক, সমান।"},
 {"n": 99, "w": "Rescind", "p": "রিসিন্ড", "pos": "verb", "en": "To cancel officially.", "bn": "রদ করা; বাতিল করা।", "ex": ["The order was rescinded."], "tip": "Re + scind (কাটা) → কেটে বাতিল।"},
-{"n": 100, "w": "Inherent", "p": "ইনহেয়ারেন্ট", "pos": "adjective", "en": "Existing as a natural part.", "bn": "সহজাত; অন্তর্নিহিত।", "ex": ["Risk is inherent in any business."], "tip": "In + here → ভেতরেই লেগে আছে।"}
+{"n": 100, "w": "Inherent", "p": "ইনহেয়ারেন্ট", "pos": "adjective", "en": "Existing as a natural part.", "bn": "সহজাত; অন্তর্নিহিত।", "ex": ["Risk is inherent in any business."], "tip": "In + here → ভেতরেই লেগে আছে।"},
+{n:101,w:"Rescind",bn:"বাতিল করা, রদ করা",syn:"Revoke, Repeal, Annul, Cancel, Overturn"},
+{n:102,w:"Inherent",bn:"সহজাত, অন্তর্নিহিত",syn:"Innate, Intrinsic, Built-in, Inborn"},
+{n:103,w:"Verbose",bn:"বাগাড়ম্বরপূর্ণ, বহুভাষী",syn:"Wordy, Long-winded, Prolix, Garrulous"},
+{n:104,w:"Prohibitive",bn:"(দাম) নাগালের বাইরে; নিষেধমূলক",syn:"Exorbitant, Extortionate, Forbidding, Restrictive"},
+{n:105,w:"Contentious",bn:"বিতর্কিত; কলহপ্রিয়",syn:"Controversial, Quarrelsome, Argumentative, Disputatious"},
+{n:106,w:"Contention",bn:"বিবাদ, তর্ক; দাবি",syn:"Dispute, Argument, Controversy, Assertion"},
+{n:107,w:"Derivative",bn:"অনুকরণমূলক; উদ্ভূত",syn:"Imitative, Unoriginal, Secondary, Borrowed"},
+{n:108,w:"Grandiloquent",bn:"আড়ম্বরপূর্ণ ভাষাযুক্ত",syn:"Pompous, Bombastic, Pretentious, Magniloquent"},
+{n:109,w:"Compendium",bn:"সংক্ষিপ্তসার; সংকলন",syn:"Summary, Digest, Abstract, Anthology"},
+{n:110,w:"Admonish",bn:"সতর্ক করা; মৃদু ভর্ৎসনা করা",syn:"Reprimand, Warn, Rebuke, Scold"},
+{n:111,w:"Dissemble",bn:"ভান করা; আসল উদ্দেশ্য গোপন করা",syn:"Feign, Pretend, Conceal, Disguise"},
+{n:112,w:"Goad",bn:"উসকানো; খোঁচা দেওয়া",syn:"Prod, Provoke, Spur, Incite"},
+{n:113,w:"Efficacy",bn:"কার্যকারিতা",syn:"Effectiveness, Potency, Efficiency, Power"},
+{n:114,w:"Emulate",bn:"অনুকরণ করা; সমকক্ষ হওয়ার চেষ্টা করা",syn:"Imitate, Copy, Mimic, Follow"},
+{n:115,w:"Facetious",bn:"(অসময়ে) রসিকতাপূর্ণ; ঠাট্টাচ্ছলে",syn:"Flippant, Jocular, Joking, Humorous"},
+{n:116,w:"Tirade",bn:"তীব্র গালাগাল; দীর্ঘ কটুবাক্য",syn:"Diatribe, Harangue, Rant, Outburst"},
+{n:117,w:"Tangential",bn:"অপ্রাসঙ্গিক; প্রসঙ্গ-বহির্ভূত",syn:"Irrelevant, Peripheral, Digressive, Incidental"},
+{n:118,w:"Inert",bn:"নিষ্ক্রিয়, জড়",syn:"Inactive, Motionless, Passive, Static"},
+{n:119,w:"Stolid",bn:"নির্বিকার; আবেগহীন",syn:"Impassive, Unemotional, Phlegmatic, Dull"},
+{n:120,w:"Propitiate",bn:"তুষ্ট করা; শান্ত করা",syn:"Appease, Placate, Pacify, Conciliate"},
+{n:121,w:"Divest",bn:"বঞ্চিত করা; (সম্পদ) বিক্রি করে দেওয়া",syn:"Strip, Deprive, Dispossess, Dispose"},
+{n:122,w:"Impede",bn:"বাধা দেওয়া",syn:"Hinder, Obstruct, Hamper, Block"},
+{n:123,w:"Idolatry",bn:"মূর্তিপূজা; অন্ধ ভক্তি",syn:"Idol worship, Adoration, Hero-worship, Veneration"},
+{n:124,w:"Futile",bn:"নিষ্ফল, বৃথা",syn:"Useless, Fruitless, Vain, Pointless"},
+{n:125,w:"Exculpate",bn:"দোষমুক্ত করা",syn:"Exonerate, Absolve, Acquit, Vindicate"},
+{n:126,w:"Capricious",bn:"খামখেয়ালি",syn:"Fickle, Whimsical, Impulsive, Erratic"},
+{n:127,w:"Engender",bn:"সৃষ্টি করা; জন্ম দেওয়া",syn:"Cause, Produce, Generate, Breed"},
+{n:128,w:"Ascetic",bn:"সন্ন্যাসী; কৃচ্ছ্রসাধনকারী",syn:"Austere, Abstinent, Self-denying, Monastic"},
+{n:129,w:"Plummet",bn:"হঠাৎ ও দ্রুত পড়ে যাওয়া",syn:"Plunge, Nosedive, Tumble, Crash"},
+{n:130,w:"Inchoate",bn:"সবে শুরু হওয়া; অপরিণত",syn:"Rudimentary, Incipient, Undeveloped, Embryonic"},
+{n:131,w:"Malingerer",bn:"অসুস্থতার ভান করে দায় এড়ায় যে",syn:"Shirker, Skiver, Slacker, Pretender"},
+{n:132,w:"Insinuate",bn:"ইঙ্গিত করা; কৌশলে ঢুকে পড়া",syn:"Imply, Hint, Suggest, Intimate"},
+{n:133,w:"Appropriate",bn:"যথাযথ; (অনুমতি ছাড়া) আত্মসাৎ করা",syn:"Suitable, Proper, Apt, Seize"},
+{n:134,w:"Negate",bn:"নাকচ করা; অকার্যকর করা",syn:"Nullify, Cancel, Invalidate, Deny"},
+{n:135,w:"Coda",bn:"উপসংহার (সংগীত/রচনার শেষাংশ)",syn:"Conclusion, Epilogue, Finale, Ending"},
+{n:136,w:"Condone",bn:"ক্ষমা করে নেওয়া; মেনে নেওয়া",syn:"Excuse, Forgive, Overlook, Tolerate"},
+{n:137,w:"Strut",bn:"বুক ফুলিয়ে হাঁটা; দম্ভভরে চলা",syn:"Swagger, Parade, Prance, Stride"},
+{n:138,w:"Equanimity",bn:"মানসিক স্থিরতা; অবিচলতা",syn:"Composure, Calmness, Poise, Serenity"},
+{n:139,w:"Extrapolation",bn:"(জানা তথ্য থেকে) অনুমান/সম্প্রসারণ",syn:"Projection, Inference, Estimation, Deduction"},
+{n:140,w:"Shard",bn:"ভাঙা টুকরো (কাচ/মাটির)",syn:"Fragment, Splinter, Sliver, Piece"},
+{n:141,w:"Inconsequential",bn:"গুরুত্বহীন",syn:"Insignificant, Trivial, Negligible, Petty"},
+{n:142,w:"Decorum",bn:"শিষ্টাচার; ভব্যতা",syn:"Etiquette, Propriety, Politeness, Dignity"},
+{n:143,w:"Hyperbole",bn:"অতিশয়োক্তি",syn:"Exaggeration, Overstatement, Embellishment, Magnification"},
+{n:144,w:"Lassitude",bn:"ক্লান্তি; অবসাদ",syn:"Weariness, Fatigue, Lethargy, Languor"},
+{n:145,w:"Zealot",bn:"ধর্মান্ধ/অতি উৎসাহী ব্যক্তি",syn:"Fanatic, Extremist, Enthusiast, Bigot"},
+{n:146,w:"Obsequious",bn:"চাটুকার; অতি তোষামুদে",syn:"Servile, Sycophantic, Fawning, Subservient"},
+{n:147,w:"Deride",bn:"বিদ্রূপ করা",syn:"Mock, Ridicule, Scoff, Jeer"},
+{n:148,w:"Levity",bn:"লঘুতা; চপলতা",syn:"Frivolity, Flippancy, Humor, Lightheartedness"},
+{n:149,w:"Mollify",bn:"শান্ত করা; ক্রোধ প্রশমিত করা",syn:"Soothe, Pacify, Appease, Calm"},
+{n:150,w:"Antipathy",bn:"বিদ্বেষ; স্বাভাবিক অনীহা",syn:"Hostility, Aversion, Animosity, Dislike"},
+{n:151,w:"Implode",bn:"ভেতরের দিকে ধসে পড়া",syn:"Collapse, Cave in, Crumble, Fall in"},
+{n:152,w:"Anomalous",bn:"অস্বাভাবিক; ব্যতিক্রমী",syn:"Abnormal, Irregular, Atypical, Aberrant"},
+{n:153,w:"Soporific",bn:"ঘুমপাড়ানি; ঘুম আনে এমন",syn:"Sedative, Sleep-inducing, Narcotic, Hypnotic"},
+{n:154,w:"Substantiate",bn:"প্রমাণ দ্বারা সমর্থন করা",syn:"Verify, Prove, Confirm, Corroborate"},
+{n:155,w:"Guileless",bn:"সরল; কপটতাহীন",syn:"Artless, Naive, Candid, Innocent"},
+{n:156,w:"Diffidence",bn:"আত্মবিশ্বাসের অভাব; সংকোচ",syn:"Shyness, Timidity, Reserve, Hesitancy"},
+{n:157,w:"Elegy",bn:"শোককাব্য",syn:"Lament, Dirge, Requiem, Threnody"},
+{n:158,w:"Aggregate",bn:"সমষ্টি; একত্রিত করা",syn:"Total, Sum, Whole, Collective"},
+{n:159,w:"Compliant",bn:"অনুগত; নিয়ম মেনে চলে এমন",syn:"Obedient, Submissive, Docile, Agreeable"},
+{n:160,w:"Perfidious",bn:"বিশ্বাসঘাতক",syn:"Treacherous, Disloyal, Faithless, Deceitful"},
+{n:161,w:"Gullible",bn:"সহজে প্রতারিত হয় এমন; সরল বিশ্বাসী",syn:"Naive, Credulous, Easily fooled, Green"},
+{n:162,w:"Plethora",bn:"প্রাচুর্য; অতিরিক্ত পরিমাণ",syn:"Excess, Abundance, Surfeit, Glut"},
+{n:163,w:"Analogous",bn:"সদৃশ; তুলনীয়",syn:"Similar, Comparable, Parallel, Equivalent"},
+{n:164,w:"Inadvertently",bn:"অনিচ্ছাকৃতভাবে; অসাবধানে",syn:"Unintentionally, Accidentally, Unwittingly, Carelessly"},
+{n:165,w:"Subside",bn:"প্রশমিত হওয়া; কমে আসা",syn:"Abate, Decrease, Ebb, Diminish"},
+{n:166,w:"Mitigate",bn:"লাঘব করা; তীব্রতা কমানো",syn:"Alleviate, Reduce, Ease, Lessen"},
+{n:167,w:"Harangue",bn:"উচ্চৈঃস্বরে দীর্ঘ বক্তৃতা; তিরস্কার",syn:"Tirade, Lecture, Rant, Diatribe"},
+{n:168,w:"Artless",bn:"সরল; কৃত্রিমতাহীন",syn:"Guileless, Natural, Simple, Naive"},
+{n:169,w:"Intransigence",bn:"একগুঁয়েমি; আপসহীনতা",syn:"Stubbornness, Obstinacy, Inflexibility, Obduracy"},
+{n:170,w:"Desultory",bn:"এলোমেলো; লক্ষ্যহীন",syn:"Aimless, Random, Haphazard, Half-hearted"},
+{n:171,w:"Adulterate",bn:"ভেজাল মেশানো",syn:"Contaminate, Taint, Debase, Corrupt"},
+{n:172,w:"Dogmatic",bn:"গোঁড়া; স্বমতে অনড়",syn:"Opinionated, Doctrinaire, Dictatorial, Assertive"},
+{n:173,w:"Disparage",bn:"হেয় করা; ছোট করে দেখানো",syn:"Belittle, Denigrate, Criticize, Undervalue"},
+{n:174,w:"Burgeon",bn:"দ্রুত বেড়ে ওঠা; অঙ্কুরিত হওয়া",syn:"Flourish, Thrive, Expand, Mushroom"},
+{n:175,w:"Intractable",bn:"অবাধ্য; সমাধান করা কঠিন",syn:"Stubborn, Unmanageable, Obstinate, Unruly"},
+{n:176,w:"Precursor",bn:"পূর্বসূরি; অগ্রদূত",syn:"Forerunner, Predecessor, Harbinger, Herald"},
+{n:177,w:"Abeyance",bn:"সাময়িক স্থগিত অবস্থা",syn:"Suspension, Dormancy, Latency, Postponement"},
+{n:178,w:"Fallacious",bn:"ভ্রান্ত; যুক্তিভ্রষ্ট",syn:"Misleading, Erroneous, Illogical, Deceptive"},
+{n:179,w:"Incongruity",bn:"অসংগতি; বেমানান",syn:"Inconsistency, Discrepancy, Disparity, Absurdity"},
+{n:180,w:"Supposition",bn:"অনুমান; ধারণা",syn:"Assumption, Hypothesis, Conjecture, Guess"},
+{n:181,w:"Apprise",bn:"অবহিত করা",syn:"Inform, Notify, Tell, Advise"},
+{n:182,w:"Plasticity",bn:"নমনীয়তা; আকার পরিবর্তনযোগ্যতা",syn:"Flexibility, Pliability, Malleability, Suppleness"},
+{n:183,w:"Skeptic",bn:"সংশয়বাদী",syn:"Doubter, Cynic, Questioner, Disbeliever"},
+{n:184,w:"Disseminate",bn:"ছড়িয়ে দেওয়া; প্রচার করা",syn:"Spread, Circulate, Broadcast, Propagate"},
+{n:185,w:"Incorporate",bn:"অন্তর্ভুক্ত করা; একীভূত করা",syn:"Include, Integrate, Merge, Absorb"},
+{n:186,w:"Indolent",bn:"অলস",syn:"Lazy, Idle, Slothful, Sluggish"},
+{n:187,w:"Viscous",bn:"আঠালো; ঘন",syn:"Sticky, Gooey, Thick, Syrupy"},
+{n:188,w:"Iconoclastic",bn:"প্রচলিত বিশ্বাস/প্রথা ভাঙতে চায় এমন",syn:"Rebellious, Unorthodox, Image-breaking, Heretical"},
+{n:189,w:"Enhance",bn:"বৃদ্ধি করা; উন্নত করা",syn:"Improve, Boost, Augment, Heighten"},
+{n:190,w:"Ingenuous",bn:"সরল; অকপট",syn:"Candid, Naive, Frank, Artless"},
+{n:191,w:"Occlude",bn:"বন্ধ করা; আটকে দেওয়া",syn:"Block, Obstruct, Clog, Close"},
+{n:192,w:"Pervasive",bn:"সর্বব্যাপী",syn:"Widespread, Prevalent, Ubiquitous, Omnipresent"},
+{n:193,w:"Beneficent",bn:"হিতকারী; দানশীল",syn:"Charitable, Generous, Benevolent, Kind"},
+{n:194,w:"Prevaricate",bn:"এড়িয়ে যাওয়া; ঘুরিয়ে কথা বলা",syn:"Equivocate, Evade, Hedge, Dodge"},
+{n:195,w:"Insipid",bn:"স্বাদহীন; নীরস",syn:"Bland, Tasteless, Dull, Flavourless"},
+{n:196,w:"Inundate",bn:"প্লাবিত করা; অভিভূত করা",syn:"Flood, Overwhelm, Swamp, Deluge"},
+{n:197,w:"Lethargic",bn:"অলস; নিস্তেজ",syn:"Sluggish, Listless, Torpid, Drowsy"},
+{n:198,w:"Fatuous",bn:"নির্বোধ; অসার",syn:"Silly, Foolish, Inane, Idiotic"},
+{n:199,w:"Lucid",bn:"স্বচ্ছ; সুস্পষ্ট",syn:"Clear, Intelligible, Comprehensible, Coherent"},
+{n:200,w:"Dichotomy",bn:"দ্বিভাজন; পরস্পরবিরোধী দুই ভাগ",syn:"Division, Split, Separation, Contrast"},
+{n:201,w:"Savor",bn:"স্বাদ উপভোগ করা",syn:"Relish, Enjoy, Appreciate, Delight in"},
+{n:202,w:"Reticent",bn:"স্বল্পভাষী; অন্তর্মুখী",syn:"Reserved, Taciturn, Uncommunicative, Quiet"},
+{n:203,w:"Magnanimity",bn:"উদারতা; মহানুভবতা",syn:"Generosity, Nobility, Big-heartedness, Charity"},
+{n:204,w:"Resolve",bn:"সংকল্প; সমাধান করা",syn:"Determination, Settle, Decide, Firmness"},
+{n:205,w:"Torpor",bn:"জড়তা; নিস্তেজতা",syn:"Lethargy, Sluggishness, Inertia, Languor"},
+{n:206,w:"Fervor",bn:"উদ্দীপনা; প্রবল আবেগ",syn:"Passion, Zeal, Ardor, Intensity"},
+{n:207,w:"Chicanery",bn:"ছলচাতুরি; কূটকৌশল",syn:"Trickery, Deception, Duplicity, Subterfuge"},
+{n:208,w:"Bombastic",bn:"আড়ম্বরপূর্ণ (ভাষা); ফাঁপা বড়াই",syn:"Pompous, Grandiose, Inflated, Pretentious"},
+{n:209,w:"Disjointed",bn:"বিচ্ছিন্ন; অসংলগ্ন",syn:"Disconnected, Incoherent, Fragmented, Rambling"},
+{n:210,w:"Pragmatic",bn:"বাস্তববাদী; ব্যবহারিক",syn:"Practical, Realistic, Sensible, Matter-of-fact"},
+{n:211,w:"Ambivalence",bn:"দ্বিধা; দোলাচল",syn:"Uncertainty, Indecision, Hesitancy, Equivocation"},
+{n:212,w:"Solicitous",bn:"উদ্বিগ্ন ও যত্নশীল",syn:"Caring, Concerned, Attentive, Considerate"},
+{n:213,w:"Diverge",bn:"ভিন্ন দিকে সরে যাওয়া",syn:"Separate, Branch, Deviate, Differ"},
+{n:214,w:"Gregarious",bn:"মিশুক; সঙ্ঘপ্রিয়",syn:"Sociable, Outgoing, Friendly, Extroverted"},
+{n:215,w:"Audacious",bn:"দুঃসাহসী; ধৃষ্ট",syn:"Bold, Daring, Fearless, Brazen"},
+{n:216,w:"Levee",bn:"বাঁধ; নদীর তীরের বাঁধ",syn:"Embankment, Dike, Dam, Barrier"},
+{n:217,w:"Porous",bn:"ছিদ্রযুক্ত; যার ভেতর দিয়ে তরল চুঁইয়ে যায়",syn:"Permeable, Spongy, Absorbent, Penetrable"},
+{n:218,w:"Proscribe",bn:"নিষিদ্ধ ঘোষণা করা",syn:"Ban, Prohibit, Forbid, Outlaw"},
+{n:219,w:"Profound",bn:"গভীর; সুগভীর",syn:"Deep, Intense, Thoughtful, Insightful"},
+{n:220,w:"Maverick",bn:"স্বাধীনচেতা/গতানুগতিকতা-বিরোধী ব্যক্তি",syn:"Nonconformist, Rebel, Individualist, Loner"},
+{n:221,w:"Garrulous",bn:"বাচাল",syn:"Talkative, Chatty, Loquacious, Voluble"},
+{n:222,w:"Abscond",bn:"পালিয়ে যাওয়া (চুরি/অপরাধ করে)",syn:"Flee, Escape, Run away, Decamp"},
+{n:223,w:"Pedantic",bn:"বিদ্যা জাহির করে এমন; খুঁটিনাটি-প্রিয়",syn:"Fussy, Academic, Nitpicking, Bookish"},
+{n:224,w:"Itinerary",bn:"ভ্রমণসূচি",syn:"Route, Schedule, Journey plan, Tour"},
+{n:225,w:"Striated",bn:"রেখাঙ্কিত; ডোরাকাটা",syn:"Striped, Streaked, Grooved, Lined"},
+{n:226,w:"Craven",bn:"ভীরু; কাপুরুষ",syn:"Cowardly, Timid, Spineless, Fearful"},
+{n:227,w:"Coagulate",bn:"জমাট বাঁধা",syn:"Clot, Congeal, Solidify, Curdle"},
+{n:228,w:"Alleviate",bn:"লাঘব করা; উপশম করা",syn:"Relieve, Ease, Soothe, Mitigate"},
+{n:229,w:"Venerate",bn:"শ্রদ্ধা করা; পূজা করা",syn:"Revere, Worship, Honor, Respect"},
+{n:230,w:"Discordant",bn:"অমিল; বেসুরো",syn:"Conflicting, Harsh, Inharmonious, Dissonant"},
+{n:231,w:"Vacillate",bn:"দোদুল্যমান থাকা; সিদ্ধান্তহীনতায় ভোগা",syn:"Waver, Hesitate, Fluctuate, Oscillate"},
+{n:232,w:"Alacrity",bn:"তৎপরতা; আগ্রহ",syn:"Eagerness, Readiness, Promptness, Willingness"},
+{n:233,w:"Mundane",bn:"সাধারণ; পার্থিব; একঘেয়ে",syn:"Ordinary, Commonplace, Banal, Worldly"},
+{n:234,w:"Digression",bn:"প্রসঙ্গান্তর",syn:"Detour, Deviation, Aside, Tangent"},
+{n:235,w:"Pathological",bn:"রোগসংক্রান্ত; অস্বাভাবিক",syn:"Diseased, Morbid, Compulsive, Obsessive"},
+{n:236,w:"Enervate",bn:"দুর্বল করা; শক্তিহীন করা",syn:"Weaken, Exhaust, Debilitate, Drain"},
+{n:237,w:"Disinterested",bn:"নিরপেক্ষ; স্বার্থহীন",syn:"Impartial, Unbiased, Neutral, Objective"},
+{n:238,w:"Facilitate",bn:"সহজ করা; সুগম করা",syn:"Ease, Assist, Expedite, Enable"},
+{n:239,w:"Aesthetic",bn:"নান্দনিক; সৌন্দর্যবোধসংক্রান্ত",syn:"Artistic, Tasteful, Beautiful, Visual"},
+{n:240,w:"Frugality",bn:"মিতব্যয়িতা",syn:"Thrift, Economy, Prudence, Carefulness"},
+{n:241,w:"Discrete",bn:"আলাদা; স্বতন্ত্র",syn:"Separate, Distinct, Individual, Detached"},
+{n:242,w:"Commensurate",bn:"সমানুপাতিক; উপযুক্ত",syn:"Proportionate, Equivalent, Corresponding, Adequate"},
+{n:243,w:"Banal",bn:"জোলো; মামুলি",syn:"Trite, Hackneyed, Commonplace, Cliched"},
+{n:244,w:"Phlegmatic",bn:"নির্লিপ্ত; ধীরস্থির",syn:"Calm, Stoic, Placid, Unemotional"},
+{n:245,w:"Vituperative",bn:"কটূক্তিপূর্ণ; গালিগালাজমূলক",syn:"Abusive, Insulting, Scathing, Harsh"},
+{n:246,w:"Inure",bn:"অভ্যস্ত করা (কষ্ট/কঠিন পরিস্থিতিতে)",syn:"Accustom, Harden, Habituate, Toughen"},
+{n:247,w:"Tortuous",bn:"আঁকাবাঁকা; জটিল",syn:"Winding, Twisting, Convoluted, Circuitous"},
+{n:248,w:"Austere",bn:"কঠোর; সাদাসিধে",syn:"Severe, Strict, Plain, Spartan"},
+{n:249,w:"Eclectic",bn:"বিভিন্ন উৎস থেকে সংগৃহীত; সমন্বয়ী",syn:"Diverse, Varied, Broad, Mixed"},
+{n:250,w:"Erudite",bn:"সুপণ্ডিত; বিদ্বান",syn:"Learned, Scholarly, Knowledgeable, Educated"},
+{n:251,w:"Partisan",bn:"পক্ষপাতদুষ্ট; দলের অনুগত সমর্থক",syn:"Biased, Supporter, Adherent, Prejudiced"},
+{n:252,w:"Meticulous",bn:"অতি সতর্ক; খুঁতখুঁতে",syn:"Careful, Thorough, Precise, Painstaking"},
+{n:253,w:"Latent",bn:"সুপ্ত; প্রচ্ছন্ন",syn:"Dormant, Hidden, Potential, Concealed"},
+{n:254,w:"Permeable",bn:"ভেদ্য; যার মধ্য দিয়ে তরল চুঁইয়ে যেতে পারে",syn:"Porous, Penetrable, Absorbent, Pervious"},
+{n:255,w:"Document",bn:"দলিল; তথ্যসহ লিপিবদ্ধ করা",syn:"Record, Paper, Certificate, Register"},
+{n:256,w:"Belie",bn:"মিথ্যা প্রমাণ করা; ভুল ধারণা দেওয়া",syn:"Contradict, Disprove, Misrepresent, Conceal"},
+{n:257,w:"Subpoena",bn:"আদালতের তলব/সমন",syn:"Summons, Writ, Court order, Citation"},
+{n:258,w:"Conundrum",bn:"ধাঁধা; জটিল সমস্যা",syn:"Puzzle, Riddle, Enigma, Dilemma"},
+{n:259,w:"Assuage",bn:"প্রশমিত করা; ব্যথা কমানো",syn:"Relieve, Soothe, Ease, Appease"},
+{n:260,w:"Welter",bn:"বিশৃঙ্খল মিশ্রণ; গড়াগড়ি দেওয়া",syn:"Jumble, Mess, Muddle, Wallow"},
+{n:261,w:"Penchant",bn:"ঝোঁক; প্রবণতা",syn:"Inclination, Liking, Fondness, Bent"},
+{n:262,w:"Attenuate",bn:"সূক্ষ্ম করা; দুর্বল করা",syn:"Weaken, Reduce, Dilute, Thin"},
+{n:263,w:"Aver",bn:"দৃঢ়ভাবে ঘোষণা করা",syn:"Assert, Declare, Affirm, Maintain"},
+{n:264,w:"Specious",bn:"বাহ্যিকভাবে সঠিক কিন্তু আসলে ভ্রান্ত",syn:"Misleading, Deceptive, Plausible, Fallacious"},
+{n:265,w:"Fawning",bn:"তোষামোদকারী",syn:"Servile, Flattering, Sycophantic, Cringing"},
+{n:266,w:"Confound",bn:"হতবুদ্ধি করা",syn:"Perplex, Baffle, Bewilder, Puzzle"},
+{n:267,w:"Gainsay",bn:"অস্বীকার করা; খণ্ডন করা",syn:"Deny, Contradict, Dispute, Oppose"},
+{n:268,w:"Flout",bn:"অবজ্ঞা করা (আইন/নিয়ম)",syn:"Defy, Disregard, Violate, Scorn"},
+{n:269,w:"Embellish",bn:"অলংকৃত করা; অতিরঞ্জিত করা",syn:"Decorate, Adorn, Exaggerate, Enhance"},
+{n:270,w:"Spectrum",bn:"বর্ণালি; ক্ষেত্র/পরিসর",syn:"Range, Scale, Gamut, Array"},
+{n:271,w:"Stipulate",bn:"শর্ত আরোপ করা; স্পষ্টভাবে নির্ধারণ করা",syn:"Specify, Require, Demand, Condition"},
+{n:272,w:"Imperturbable",bn:"অবিচল; শান্ত",syn:"Unflappable, Calm, Composed, Serene"},
+{n:273,w:"Quibble",bn:"তুচ্ছ আপত্তি; ছোটখাটো বিষয়ে তর্ক",syn:"Cavil, Carp, Nitpick, Squabble"},
+{n:274,w:"Diffuse",bn:"ছড়িয়ে পড়া; বিক্ষিপ্ত",syn:"Spread, Scatter, Disperse, Dissipate"},
+{n:275,w:"Oscillate",bn:"দোলা; দুই প্রান্তের মধ্যে ঘোরা",syn:"Swing, Fluctuate, Waver, Vibrate"},
+{n:276,w:"Appease",bn:"সন্তুষ্ট/শান্ত করা",syn:"Placate, Pacify, Soothe, Mollify"},
+{n:277,w:"Anachronism",bn:"কালবিরুদ্ধ বিষয়",syn:"Misplacement, Archaism, Misdate, Outdated thing"},
+{n:278,w:"Problematic",bn:"সমস্যাপূর্ণ",syn:"Troublesome, Difficult, Doubtful, Questionable"},
+{n:279,w:"Obdurate",bn:"একগুঁয়ে; কঠিনহৃদয়",syn:"Stubborn, Inflexible, Hard-hearted, Unyielding"},
+{n:280,w:"Loquacious",bn:"বাচাল; বহুভাষী",syn:"Talkative, Garrulous, Chatty, Voluble"},
+{n:281,w:"Amalgamate",bn:"মিশ্রিত/একীভূত করা",syn:"Merge, Combine, Unite, Blend"},
+{n:282,w:"Esoteric",bn:"গূঢ়; অল্প কয়েকজনের বোধগম্য",syn:"Obscure, Arcane, Cryptic, Abstruse"},
+{n:283,w:"Laud",bn:"প্রশংসা করা",syn:"Praise, Extol, Applaud, Commend"},
+{n:284,w:"Paragon",bn:"আদর্শ নমুনা; সর্বোৎকৃষ্ট দৃষ্টান্ত",syn:"Model, Exemplar, Epitome, Ideal"},
+{n:285,w:"Exacerbate",bn:"অবস্থা আরও খারাপ করা",syn:"Aggravate, Worsen, Intensify, Inflame"},
+{n:286,w:"Perfunctory",bn:"দায়সারা; অযত্নের",syn:"Cursory, Superficial, Mechanical, Casual"},
+{n:287,w:"Bolster",bn:"শক্তিশালী করা; সমর্থন জোগানো",syn:"Support, Strengthen, Reinforce, Boost"},
+{n:288,w:"Pungent",bn:"ঝাঁঝালো; তীব্র গন্ধযুক্ত",syn:"Sharp, Acrid, Spicy, Biting"},
+{n:289,w:"Eulogy",bn:"প্রশস্তি; শোকসভায় প্রশংসাসূচক বক্তৃতা",syn:"Tribute, Praise, Panegyric, Homage"},
+{n:290,w:"Reprobate",bn:"নীতিহীন/দুশ্চরিত্র ব্যক্তি",syn:"Scoundrel, Rogue, Villain, Degenerate"},
+{n:291,w:"Malleable",bn:"নমনীয়; পিটিয়ে আকার দেওয়া যায় এমন",syn:"Pliable, Flexible, Ductile, Tractable"},
+{n:292,w:"Impair",bn:"ক্ষতিগ্রস্ত/দুর্বল করা",syn:"Damage, Weaken, Harm, Diminish"},
+{n:293,w:"Truculence",bn:"উগ্রতা; কলহপ্রিয়তা",syn:"Aggressiveness, Belligerence, Hostility, Ferocity"},
+{n:294,w:"Exigency",bn:"জরুরি প্রয়োজন; সংকটকাল",syn:"Emergency, Urgency, Crisis, Necessity"},
+{n:295,w:"Irascible",bn:"বদমেজাজি; খিটখিটে",syn:"Irritable, Short-tempered, Cranky, Hot-tempered"},
+{n:296,w:"Deterrent",bn:"প্রতিরোধক; নিবৃত্তকারী",syn:"Obstacle, Hindrance, Discouragement, Restraint"},
+{n:297,w:"Placate",bn:"শান্ত করা",syn:"Appease, Pacify, Soothe, Mollify"},
+{n:298,w:"Irresolute",bn:"দ্বিধাগ্রস্ত; সিদ্ধান্তহীন",syn:"Indecisive, Hesitant, Wavering, Uncertain"},
+{n:299,w:"Paucity",bn:"স্বল্পতা; অভাব",syn:"Scarcity, Shortage, Dearth, Insufficiency"},
+{n:300,w:"Opprobrium",bn:"চরম নিন্দা; কলঙ্ক",syn:"Disgrace, Shame, Infamy, Censure"},
+{n:301,w:"Discredit",bn:"সুনাম নষ্ট করা; অবিশ্বাস্য করে তোলা",syn:"Disgrace, Disparage, Defame, Dishonor"},
+{n:302,w:"Autonomous",bn:"স্বায়ত্তশাসিত; স্বাধীন",syn:"Independent, Self-governing, Sovereign, Free"},
+{n:303,w:"Morose",bn:"বিষণ্ন; মুখ ভার",syn:"Gloomy, Sullen, Glum, Sulky"},
+{n:304,w:"Tractable",bn:"বাধ্য; সহজে পরিচালনাযোগ্য",syn:"Docile, Manageable, Compliant, Obedient"},
+{n:305,w:"Diatribe",bn:"তীব্র সমালোচনা/আক্রমণাত্মক বক্তৃতা",syn:"Tirade, Harangue, Rant, Invective"},
+{n:306,w:"Penury",bn:"চরম দারিদ্র্য",syn:"Poverty, Destitution, Indigence, Want"},
+{n:307,w:"Pristine",bn:"আদি ও নির্মল; অম্লান",syn:"Immaculate, Unspoiled, Untouched, Spotless"},
+{n:308,w:"Conciliatory",bn:"মীমাংসামূলক; সমঝোতাপূর্ণ",syn:"Appeasing, Placating, Peaceable, Pacific"},
+{n:309,w:"Ambiguous",bn:"দ্ব্যর্থক; অস্পষ্ট",syn:"Unclear, Equivocal, Vague, Obscure"},
+{n:310,w:"Precipitate",bn:"তড়িঘড়ি/অবিবেচক; ত্বরান্বিত করা",syn:"Hasty, Rash, Abrupt, Hurried"},
+{n:311,w:"Metamorphosis",bn:"রূপান্তর",syn:"Transformation, Change, Mutation, Transfiguration"},
+{n:312,w:"Invective",bn:"কটুবাক্য; গালিগালাজ",syn:"Abuse, Insults, Tirade, Vituperation"},
+{n:313,w:"Qualified",bn:"যোগ্য; শর্তসাপেক্ষ",syn:"Eligible, Competent, Limited, Conditional"},
+{n:314,w:"Dupe",bn:"প্রতারিত ব্যক্তি; ঠকানো",syn:"Deceive, Trick, Fool, Victim"},
+{n:315,w:"Discrepancy",bn:"অসংগতি; গরমিল",syn:"Disparity, Inconsistency, Difference, Variance"},
+{n:316,w:"Aberrant",bn:"বিপথগামী; স্বাভাবিকের ব্যতিক্রম",syn:"Deviant, Abnormal, Atypical, Anomalous"},
+{n:317,w:"Tenuous",bn:"ক্ষীণ; পাতলা; দুর্বল",syn:"Flimsy, Weak, Slight, Insubstantial"},
+{n:318,w:"Refute",bn:"খণ্ডন করা",syn:"Disprove, Rebut, Counter, Debunk"},
+{n:319,w:"Warrant",bn:"অনুমোদন/পরোয়ানা; যুক্তিসংগত করা",syn:"Justify, Authorization, Permit, Guarantee"},
+{n:320,w:"Approbation",bn:"অনুমোদন; প্রশংসা",syn:"Approval, Praise, Commendation, Sanction"},
+{n:321,w:"Miscreant",bn:"দুষ্কৃতকারী",syn:"Wrongdoer, Villain, Criminal, Rascal"},
+{n:322,w:"Presage",bn:"পূর্বাভাস দেওয়া; ইঙ্গিত",syn:"Foreshadow, Portend, Omen, Predict"},
+{n:323,w:"Malign",bn:"অনিষ্টকর; কুৎসা রটানো",syn:"Harmful, Slander, Defame, Vilify"},
+{n:324,w:"Somatic",bn:"দৈহিক; শরীরসংক্রান্ত",syn:"Bodily, Physical, Corporeal, Physiological"},
+{n:325,w:"Strident",bn:"কর্কশ; তীক্ষ্ণ স্বরের",syn:"Harsh, Shrill, Grating, Raucous"},
+{n:326,w:"Tout",bn:"(জোরালোভাবে) প্রচার করা; দালাল",syn:"Promote, Advertise, Peddle, Hawk"},
+{n:327,w:"Contumacious",bn:"একগুঁয়ে অবাধ্য; কর্তৃপক্ষের আদেশ অমান্যকারী",syn:"Rebellious, Defiant, Insubordinate, Disobedient"},
+{n:328,w:"Continence",bn:"আত্মসংযম",syn:"Self-restraint, Abstinence, Moderation, Chastity"},
+{n:329,w:"Adamant",bn:"অনমনীয়; অটল",syn:"Unyielding, Firm, Resolute, Inflexible"},
+{n:330,w:"Brazen",bn:"বেহায়া; নির্লজ্জ",syn:"Shameless, Bold, Audacious, Barefaced"},
+{n:331,w:"Fallow",bn:"পতিত (জমি); অনাবাদি",syn:"Uncultivated, Unplowed, Dormant, Idle"},
+{n:332,w:"Modicum",bn:"সামান্য পরিমাণ",syn:"Bit, Little, Trace, Small amount"},
+{n:333,w:"Wary",bn:"সতর্ক; সাবধান",syn:"Cautious, Alert, Careful, Vigilant"},
+{n:334,w:"Tome",bn:"বিশাল গ্রন্থ",syn:"Volume, Book, Large book, Opus"},
+{n:335,w:"Usury",bn:"সুদখোরি; অতিরিক্ত সুদ",syn:"Loan-sharking, Moneylending, Exploitation, Extortion"},
+{n:336,w:"Toady",bn:"চাটুকার",syn:"Sycophant, Flatterer, Lackey, Yes-man"},
+{n:337,w:"Libido",bn:"যৌনেচ্ছা; কামনা",syn:"Sex drive, Desire, Lust, Passion"},
+{n:338,w:"Irresolute",bn:"দ্বিধাগ্রস্ত",syn:"Indecisive, Hesitant, Wavering, Undecided"},
+{n:339,w:"Flux",bn:"অবিরাম পরিবর্তন; প্রবাহ",syn:"Change, Flow, Fluctuation, Instability"},
+{n:340,w:"Allay",bn:"প্রশমিত করা (ভয়/উদ্বেগ)",syn:"Calm, Relieve, Ease, Alleviate"},
+{n:341,w:"Cardinal",bn:"মুখ্য; প্রধান",syn:"Chief, Principal, Fundamental, Key"},
+{n:342,w:"Emulate",bn:"অনুকরণ করা",syn:"Imitate, Copy, Mimic, Rival"},
+{n:343,w:"Fetid",bn:"দুর্গন্ধযুক্ত",syn:"Foul-smelling, Stinking, Rank, Putrid"},
+{n:344,w:"Nexus",bn:"সংযোগস্থল; বন্ধন",syn:"Link, Connection, Bond, Center"},
+{n:345,w:"Froward",bn:"একগুঁয়ে; অবাধ্য",syn:"Perverse, Contrary, Obstinate, Wayward"},
+{n:346,w:"Fulsome",bn:"অতিরিক্ত তোষামুদে; বাড়াবাড়ি রকম",syn:"Excessive, Effusive, Gushing, Sycophantic"},
+{n:347,w:"Onerous",bn:"ভারী; কষ্টকর",syn:"Burdensome, Heavy, Arduous, Taxing"},
+{n:348,w:"Junta",bn:"সামরিক শাসকচক্র",syn:"Military regime, Clique, Cabal, Faction"},
+{n:349,w:"Hermetic",bn:"বায়ুরোধী; দুর্বোধ্য",syn:"Airtight, Sealed, Esoteric, Impenetrable"},
+{n:350,w:"Proliferate",bn:"দ্রুত বৃদ্ধি পাওয়া",syn:"Multiply, Increase, Spread, Mushroom"},
+{n:351,w:"Prate",bn:"বকবক করা",syn:"Babble, Chatter, Blather, Gabble"},
+{n:352,w:"Subpoena",bn:"আদালতের সমন",syn:"Summons, Writ, Citation, Court order"},
+{n:353,w:"Opprobrium",bn:"চরম নিন্দা; কলঙ্ক",syn:"Disgrace, Infamy, Shame, Censure"},
+{n:354,w:"Regale",bn:"আপ্যায়ন করা; মনোরঞ্জন করা",syn:"Entertain, Amuse, Feast, Delight"},
+{n:355,w:"Sage",bn:"জ্ঞানী ব্যক্তি; প্রাজ্ঞ",syn:"Wise, Philosopher, Savant, Guru"},
+{n:356,w:"Dissident",bn:"ভিন্নমতাবলম্বী",syn:"Dissenter, Protester, Rebel, Nonconformist"},
+{n:357,w:"Etymology",bn:"শব্দের উৎপত্তিতত্ত্ব",syn:"Word origin, Derivation, Word history, Philology"},
+{n:358,w:"Kudos",bn:"প্রশংসা; সুনাম",syn:"Praise, Glory, Acclaim, Honor"},
+{n:359,w:"Tirade",bn:"তীব্র গালাগাল",syn:"Rant, Diatribe, Harangue, Outburst"},
+{n:360,w:"Necromancy",bn:"প্রেততন্ত্র; কালো জাদু",syn:"Black magic, Sorcery, Witchcraft, Wizardry"},
+{n:361,w:"Fresco",bn:"ভিজে দেয়ালে আঁকা চিত্র",syn:"Mural, Wall painting, Painting, Artwork"},
+{n:362,w:"Broach",bn:"(বিষয়) উত্থাপন করা",syn:"Raise, Introduce, Mention, Bring up"},
+{n:363,w:"Vendetta",bn:"বংশানুক্রমিক শত্রুতা; প্রতিশোধ",syn:"Feud, Blood feud, Revenge, Grudge"},
+{n:364,w:"Daunt",bn:"ভয় দেখানো; দমিয়ে দেওয়া",syn:"Intimidate, Discourage, Dismay, Deter"},
+{n:365,w:"Apex",bn:"শীর্ষবিন্দু; চূড়া",syn:"Peak, Summit, Pinnacle, Zenith"},
+{n:366,w:"Calumny",bn:"মিথ্যা অপবাদ",syn:"Slander, Defamation, Libel, Smear"},
+{n:367,w:"Monolithic",bn:"একশিলা; বিশাল ও অনমনীয়",syn:"Massive, Rigid, Uniform, Solid"},
+{n:368,w:"Talisman",bn:"তাবিজ; রক্ষাকবচ",syn:"Amulet, Charm, Mascot, Fetish"},
+{n:369,w:"Quagmire",bn:"জলাভূমি; জটিল পরিস্থিতি",syn:"Swamp, Bog, Predicament, Morass"},
+{n:370,w:"Dirge",bn:"শোকগীতি",syn:"Lament, Elegy, Requiem, Funeral song"},
+{n:371,w:"Pathos",bn:"করুণরস; সহানুভূতি-উদ্রেককারী গুণ",syn:"Poignancy, Pity, Sadness, Tenderness"},
+{n:372,w:"Militate",bn:"(বিরুদ্ধে) কাজ করা; প্রভাব ফেলা",syn:"Counter, Oppose, Weigh against, Influence"},
+{n:373,w:"Immutable",bn:"অপরিবর্তনীয়",syn:"Unchangeable, Fixed, Permanent, Constant"},
+{n:374,w:"Fulminate",bn:"তীব্র নিন্দা করা; ফেটে পড়া",syn:"Denounce, Rant, Thunder, Rail"},
+{n:375,w:"Apropos",bn:"প্রাসঙ্গিক; যথোপযুক্ত",syn:"Relevant, Pertinent, Appropriate, Fitting"},
+{n:376,w:"Chivalry",bn:"বীরত্ব ও সৌজন্য; নাইটসুলভ আচরণ",syn:"Gallantry, Courtesy, Valor, Honor"},
+{n:377,w:"Ardor",bn:"তীব্র আবেগ; উদ্দীপনা",syn:"Passion, Zeal, Fervor, Enthusiasm"},
+{n:378,w:"Feral",bn:"বন্য; বুনো",syn:"Wild, Untamed, Savage, Undomesticated"},
+{n:379,w:"Intangible",bn:"অস্পর্শনীয়; অবাস্তব",syn:"Impalpable, Abstract, Incorporeal, Vague"},
+{n:380,w:"Minutia(e)",bn:"ক্ষুদ্র খুঁটিনাটি",syn:"Details, Trivia, Particulars, Small points"},
+{n:381,w:"Perennial",bn:"বহুবর্ষজীবী; চিরস্থায়ী",syn:"Lasting, Perpetual, Enduring, Recurrent"},
+{n:382,w:"Reverent",bn:"শ্রদ্ধাশীল",syn:"Respectful, Devout, Deferential, Pious"},
+{n:383,w:"Travesty",bn:"বিকৃত অনুকরণ; হাস্যকর নকল",syn:"Mockery, Parody, Farce, Distortion"},
+{n:384,w:"Quorum",bn:"কোরাম; ন্যূনতম উপস্থিতি",syn:"Minimum attendance, Required number, Majority, Assembly"},
+{n:385,w:"Covert",bn:"গোপন; প্রচ্ছন্ন",syn:"Secret, Hidden, Stealthy, Clandestine"},
+{n:386,w:"Distrait",bn:"অন্যমনস্ক",syn:"Absent-minded, Distracted, Preoccupied, Inattentive"},
+{n:387,w:"Jibe",bn:"বিদ্রূপ; মিল খাওয়া",syn:"Taunt, Gibe, Agree, Sneer"},
+{n:388,w:"Odyssey",bn:"দীর্ঘ ও ঘটনাবহুল যাত্রা",syn:"Long journey, Voyage, Quest, Adventure"},
+{n:389,w:"Tumid",bn:"স্ফীত; ফোলা",syn:"Swollen, Bloated, Inflated, Distended"},
+{n:390,w:"Tenet",bn:"মতবাদ; নীতি",syn:"Doctrine, Principle, Belief, Creed"},
+{n:391,w:"Mettle",bn:"সাহস; মনের জোর",syn:"Courage, Spirit, Bravery, Fortitude"},
+{n:392,w:"Plutocracy",bn:"ধনিকতন্ত্র",syn:"Rule by the rich, Oligarchy, Wealthy elite, Moneyed class"},
+{n:393,w:"Reprise",bn:"পুনরাবৃত্তি",syn:"Repeat, Repetition, Recap, Return"},
+{n:394,w:"Subsume",bn:"অন্তর্ভুক্ত করা",syn:"Include, Absorb, Encompass, Incorporate"},
+{n:395,w:"Sextant",bn:"নৌচালনার কোণ-পরিমাপক যন্ত্র",syn:"Navigation instrument, Octant, Quadrant, Angle measurer"},
+{n:396,w:"Rubric",bn:"নির্দেশিকা; শিরোনাম",syn:"Guidelines, Heading, Category, Title"},
+{n:397,w:"Salutary",bn:"হিতকর; উপকারী",syn:"Beneficial, Wholesome, Healthful, Advantageous"},
+{n:398,w:"Anodyne",bn:"বেদনানাশক; নিরীহ",syn:"Painkiller, Soothing, Inoffensive, Analgesic"},
+{n:399,w:"Bionic",bn:"যান্ত্রিক অঙ্গ-সংযুক্ত; অতিমানবীয়",syn:"Artificial, Cybernetic, Mechanical, Superhuman"},
+{n:400,w:"Clique",bn:"স্বার্থান্বেষী ক্ষুদ্র গোষ্ঠী",syn:"Coterie, Circle, Faction, Set"},
+{n:401,w:"Demur",bn:"আপত্তি জানানো; ইতস্তত করা",syn:"Object, Protest, Hesitate, Balk"},
+{n:402,w:"Pallid",bn:"ফ্যাকাশে",syn:"Pale, Wan, Ashen, Sallow"},
+{n:403,w:"Fauna",bn:"প্রাণীকুল",syn:"Animals, Wildlife, Creatures, Animal life"},
+{n:404,w:"Seismic",bn:"ভূকম্পন-সংক্রান্ত; বিশাল",syn:"Earthquake-related, Tremor, Massive, Momentous"},
+{n:405,w:"Vogue",bn:"প্রচলিত ফ্যাশন; জনপ্রিয়তা",syn:"Fashion, Trend, Craze, Mode"},
+{n:406,w:"Visage",bn:"মুখমণ্ডল",syn:"Face, Countenance, Appearance, Features"},
+{n:407,w:"Credence",bn:"বিশ্বাসযোগ্যতা; আস্থা",syn:"Belief, Trust, Faith, Acceptance"},
+{n:408,w:"Harrowing",bn:"মর্মান্তিক; যন্ত্রণাদায়ক",syn:"Distressing, Traumatic, Agonizing, Terrifying"},
+{n:409,w:"Mesmerize",bn:"মোহিত করা; সম্মোহিত করা",syn:"Hypnotize, Fascinate, Captivate, Entrance"},
+{n:410,w:"Rue",bn:"অনুশোচনা করা",syn:"Regret, Lament, Repent, Mourn"},
+{n:411,w:"Ruse",bn:"ছলনা; কৌশল",syn:"Trick, Ploy, Stratagem, Subterfuge"},
+{n:412,w:"Limpid",bn:"স্বচ্ছ; পরিষ্কার",syn:"Clear, Transparent, Lucid, Crystalline"},
+{n:413,w:"Divulge",bn:"প্রকাশ করা (গোপন তথ্য)",syn:"Reveal, Disclose, Leak, Expose"},
+{n:414,w:"Incursion",bn:"আকস্মিক আক্রমণ; অনুপ্রবেশ",syn:"Raid, Invasion, Foray, Intrusion"},
+{n:415,w:"Precept",bn:"উপদেশ; নীতিবাক্য",syn:"Principle, Rule, Maxim, Guideline"},
+{n:416,w:"Repine",bn:"অসন্তোষ প্রকাশ করা; কাতর হওয়া",syn:"Complain, Fret, Grumble, Lament"},
+{n:417,w:"Salacious",bn:"অশ্লীল; কামুক",syn:"Lewd, Obscene, Indecent, Bawdy"},
+{n:418,w:"Stanch",bn:"(রক্তক্ষরণ) বন্ধ করা",syn:"Stop, Halt, Check, Staunch"},
+{n:419,w:"Venal",bn:"ঘুষখোর; অর্থের বিনিময়ে বিক্রয়যোগ্য",syn:"Corrupt, Bribable, Mercenary, Dishonest"},
+{n:420,w:"Sordid",bn:"নোংরা; জঘন্য",syn:"Squalid, Dirty, Vile, Base"},
+{n:421,w:"Avuncular",bn:"কাকা/মামার মতো স্নেহশীল",syn:"Kindly, Uncle-like, Benevolent, Genial"},
+{n:422,w:"Banter",bn:"রসিকতাপূর্ণ কথোপকথন; ঠাট্টা করা",syn:"Teasing, Repartee, Joking, Badinage"},
+{n:423,w:"Clamor",bn:"হট্টগোল; জোর দাবি",syn:"Uproar, Noise, Outcry, Din"},
+{n:424,w:"Doggerel",bn:"নিম্নমানের/হালকা ছড়া",syn:"Trivial verse, Jingle, Rhyme, Bad poetry"},
+{n:425,w:"Elysian",bn:"স্বর্গীয়; পরম আনন্দময়",syn:"Heavenly, Blissful, Divine, Paradisiacal"},
+{n:426,w:"Fiat",bn:"সরকারি আদেশ; ফরমান",syn:"Decree, Order, Edict, Command"},
+{n:427,w:"Glib",bn:"বাকপটু কিন্তু অগভীর; চটপটে কথা",syn:"Smooth-tongued, Slick, Fluent, Insincere"},
+{n:428,w:"Heterodox",bn:"গতানুগতিক মতবিরোধী; অনুদার",syn:"Unorthodox, Heretical, Dissident, Nonconformist"},
+{n:429,w:"Impassive",bn:"নির্বিকার; অভিব্যক্তিহীন",syn:"Expressionless, Stoical, Unemotional, Deadpan"},
+{n:430,w:"Jocose",bn:"রসিক; কৌতুকপ্রিয়",syn:"Humorous, Playful, Jocular, Witty"},
+{n:431,w:"Mendicant",bn:"ভিক্ষুক",syn:"Beggar, Panhandler, Supplicant, Pauper"},
+{n:432,w:"Piquant",bn:"ঝাঁঝালো; মুখরোচক; আকর্ষণীয়",syn:"Spicy, Tangy, Zesty, Stimulating"},
+{n:433,w:"Sodden",bn:"ভিজে চুপচুপে",syn:"Soaked, Saturated, Drenched, Waterlogged"},
+{n:434,w:"Suffrage",bn:"ভোটাধিকার",syn:"Franchise, Right to vote, Vote, Ballot"},
+{n:435,w:"Yield",bn:"ফলন; হার মানা; উৎপাদন করা",syn:"Produce, Surrender, Crop, Give way"},
+{n:436,w:"Homily",bn:"ধর্মোপদেশ; নীতিকথা",syn:"Sermon, Lecture, Preach, Moral talk"},
+{n:437,w:"Cognizant",bn:"সচেতন; অবগত",syn:"Aware, Conscious, Informed, Mindful"},
+{n:438,w:"Nostrum",bn:"হাতুড়ে ওষুধ; সব রোগের তথাকথিত ওষুধ",syn:"Panacea, Quack remedy, Cure-all, Elixir"},
+{n:439,w:"Bard",bn:"কবি; চারণকবি",syn:"Poet, Minstrel, Troubadour, Rhymer"},
+{n:440,w:"Turbid",bn:"ঘোলা; অস্বচ্ছ",syn:"Cloudy, Muddy, Murky, Opaque"},
+{n:441,w:"Cadge",bn:"চেয়েচিন্তে আদায় করা; ভিক্ষা করা",syn:"Beg, Scrounge, Sponge, Mooch"},
+{n:442,w:"Convivial",bn:"হাসিখুশি ও মিশুক; ভোজসুলভ",syn:"Sociable, Jovial, Cheerful, Festive"},
+{n:443,w:"Dross",bn:"আবর্জনা; খাদ; অসার বস্তু",syn:"Waste, Scum, Impurity, Refuse"},
+{n:444,w:"Exorcise",bn:"ভূত তাড়ানো; দূর করা",syn:"Banish, Expel, Purge, Drive out"},
+{n:445,w:"Halcyon",bn:"শান্ত ও সুখের (অতীত দিন)",syn:"Peaceful, Tranquil, Idyllic, Golden"},
+{n:446,w:"Vapid",bn:"নীরস; প্রাণহীন",syn:"Dull, Insipid, Flat, Lifeless"},
+{n:447,w:"Tryst",bn:"গোপন অভিসার/সাক্ষাৎ",syn:"Rendezvous, Date, Assignation, Meeting"},
+{n:448,w:"Stygian",bn:"অন্ধকার ও ভয়ংকর; পাতালসদৃশ",syn:"Gloomy, Dark, Hellish, Infernal"},
+{n:449,w:"Extent",bn:"বিস্তৃতি; পরিমাণ",syn:"Scope, Range, Degree, Magnitude"},
+{n:450,w:"Accrue",bn:"ক্রমে জমা হওয়া/বেড়ে ওঠা",syn:"Accumulate, Amass, Gather, Grow"},
+{n:451,w:"Bucolic",bn:"গ্রামীণ; পল্লীসুলভ",syn:"Rustic, Rural, Pastoral, Country"},
+{n:452,w:"Litany",bn:"দীর্ঘ তালিকা; প্রার্থনা-স্তোত্র",syn:"Recital, List, Chant, Series"},
+{n:453,w:"Grouse",bn:"অভিযোগ করা; গজগজ করা",syn:"Complain, Grumble, Whine, Moan"},
+{n:454,w:"Labile",bn:"পরিবর্তনশীল; অস্থির",syn:"Unstable, Changeable, Fluctuating, Volatile"},
+{n:455,w:"Motley",bn:"বিচিত্র; বিভিন্ন ধরনের মিশ্রণ",syn:"Varied, Assorted, Diverse, Mixed"},
+{n:456,w:"Occult",bn:"অতীন্দ্রিয়; রহস্যময়",syn:"Supernatural, Mystical, Hidden, Magical"},
+{n:457,w:"Misogynist",bn:"নারীবিদ্বেষী",syn:"Woman-hater, Sexist, Chauvinist, Male chauvinist"},
+{n:458,w:"Occlude",bn:"বন্ধ করা; আটকে দেওয়া",syn:"Block, Obstruct, Clog, Shut"},
+{n:459,w:"Euphoria",bn:"অতিরিক্ত উচ্ছ্বাস",syn:"Elation, Bliss, Joy, Ecstasy"},
+{n:460,w:"Grandiloquent",bn:"আড়ম্বরপূর্ণ ভাষাযুক্ত",syn:"Pompous, Bombastic, Turgid, Magniloquent"},
+{n:461,w:"Saccharine",bn:"অতি মিষ্টি; মেকি আবেগপূর্ণ",syn:"Sugary, Syrupy, Sentimental, Cloying"},
+{n:462,w:"Belabor",bn:"অতিরিক্ত বিস্তারিত বলা; প্রহার করা",syn:"Overemphasize, Dwell on, Harp on, Overdo"},
+{n:463,w:"Anguish",bn:"তীব্র মানসিক যন্ত্রণা",syn:"Agony, Torment, Suffering, Distress"},
+{n:464,w:"Candour",bn:"সততা; অকপটতা",syn:"Honesty, Frankness, Openness, Sincerity"},
+{n:465,w:"Decimate",bn:"ব্যাপক ক্ষয় ঘটানো; ধ্বংস করা",syn:"Devastate, Destroy, Annihilate, Ravage"},
+{n:466,w:"Despot",bn:"স্বৈরশাসক",syn:"Tyrant, Dictator, Autocrat, Oppressor"},
+{n:467,w:"Frantic",bn:"উন্মত্ত; আতঙ্কিত",syn:"Frenzied, Hysterical, Desperate, Panicky"},
+{n:468,w:"Heyday",bn:"সুবর্ণকাল",syn:"Prime, Peak, Golden age, Zenith"},
+{n:469,w:"Ineffable",bn:"অবর্ণনীয়",syn:"Indescribable, Inexpressible, Unspeakable, Beyond words"},
+{n:470,w:"Languish",bn:"নিস্তেজ হয়ে পড়া; দুর্দশায় ভোগা",syn:"Decline, Wither, Fade, Pine"},
+{n:471,w:"Noxious",bn:"ক্ষতিকর; বিষাক্ত",syn:"Harmful, Toxic, Poisonous, Injurious"},
+{n:472,w:"Paltry",bn:"নগণ্য; তুচ্ছ",syn:"Trivial, Meager, Petty, Insignificant"},
+{n:473,w:"Polemic",bn:"তর্কযুদ্ধ; বিতর্কমূলক রচনা",syn:"Argument, Controversy, Debate, Dispute"},
+{n:474,w:"Replenish",bn:"পুনরায় ভরে দেওয়া",syn:"Refill, Restock, Renew, Restore"},
+{n:475,w:"Construe",bn:"ব্যাখ্যা করা; অর্থ করা",syn:"Interpret, Understand, Explain, Deduce"},
+{n:476,w:"Obfuscate",bn:"ঘোলাটে/দুর্বোধ্য করে তোলা",syn:"Confuse, Obscure, Muddle, Cloud"},
+{n:477,w:"Matriculate",bn:"বিশ্ববিদ্যালয়ে ভর্তি হওয়া",syn:"Enroll, Register, Enlist, Admit"},
+{n:478,w:"Vex",bn:"বিরক্ত/উত্ত্যক্ত করা",syn:"Annoy, Irritate, Bother, Provoke"},
+{n:479,w:"Tantamount",bn:"সমতুল্য; সমান",syn:"Equivalent, Equal, Same as, Commensurate"},
+{n:480,w:"Surfeit",bn:"অতিরিক্ত; অতি ভোগজনিত অরুচি",syn:"Excess, Glut, Surplus, Overabundance"},
+{n:481,w:"Fervid",bn:"আবেগপ্রবণ; উত্তপ্ত",syn:"Passionate, Ardent, Zealous, Vehement"},
+{n:482,w:"Ostentation",bn:"আড়ম্বর; লোক-দেখানো প্রদর্শনী",syn:"Show, Flaunting, Display, Pretension"},
+{n:483,w:"Haughty",bn:"উদ্ধত; অহংকারী",syn:"Arrogant, Proud, Conceited, Supercilious"},
+{n:484,w:"Pedant",bn:"পাণ্ডিত্য জাহিরকারী; খুঁতখুঁতে পণ্ডিতম্মন্য",syn:"Nitpicker, Stickler, Quibbler, Academic"},
+{n:485,w:"Frugal",bn:"মিতব্যয়ী",syn:"Thrifty, Economical, Sparing, Prudent"},
+{n:486,w:"Enthrall",bn:"মুগ্ধ করা; বশীভূত করা",syn:"Captivate, Enchant, Fascinate, Charm"},
+{n:487,w:"Lull",bn:"শান্ত করা; সাময়িক বিরতি",syn:"Calm, Soothe, Pause, Respite"},
+{n:488,w:"Shunt",bn:"সরিয়ে দেওয়া; অন্য লাইনে পাঠানো",syn:"Divert, Shift, Move, Redirect"},
+{n:489,w:"Hone",bn:"ধার দেওয়া; দক্ষতা শাণিত করা",syn:"Sharpen, Refine, Polish, Perfect"},
+{n:490,w:"Glean",bn:"কুড়িয়ে/বেছে সংগ্রহ করা",syn:"Gather, Collect, Harvest, Extract"},
+{n:491,w:"Rabble",bn:"উচ্ছৃঙ্খল জনতা",syn:"Mob, Crowd, Riffraff, Horde"},
+{n:492,w:"Slake",bn:"(তৃষ্ণা) মেটানো",syn:"Quench, Satisfy, Sate, Satiate"},
+{n:493,w:"Coax",bn:"ফুসলানো; মিষ্টি কথায় রাজি করানো",syn:"Cajole, Persuade, Wheedle, Entice"},
+{n:494,w:"Wag",bn:"নাড়ানো (লেজ); রসিক ব্যক্তি",syn:"Wave, Wiggle, Joker, Wit"},
+{n:495,w:"Harbinger",bn:"অগ্রদূত; পূর্বাভাস",syn:"Herald, Forerunner, Precursor, Omen"},
+{n:496,w:"Lope",bn:"লম্বা পা ফেলে ধীরে দৌড়ানো",syn:"Stride, Bound, Gallop, Run easily"},
+{n:497,w:"Wile",bn:"ছলনা; চাতুরী",syn:"Trick, Ploy, Stratagem, Artifice"},
+{n:498,w:"Telltale",bn:"গোপন তথ্য ফাঁসকারী; প্রকাশক চিহ্ন",syn:"Revealing, Informer, Giveaway, Indicative"},
+{n:499,w:"Jocular",bn:"কৌতুকপ্রিয়",syn:"Humorous, Joking, Playful, Facetious"},
+{n:500,w:"Pariah",bn:"সমাজচ্যুত ব্যক্তি",syn:"Outcast, Outsider, Reject, Exile"},
+{n:501,w:"Mite",bn:"অতি ক্ষুদ্র পরিমাণ; ছোট্ট জীব/কণা",syn:"Bit, Particle, Speck, Tiny amount"},
+{n:502,w:"Yeoman",bn:"স্বাধীন ক্ষুদ্র কৃষক; বিশ্বস্ত সহকারী",syn:"Freeholder, Farmer, Retainer, Attendant"},
+{n:503,w:"Redeem",bn:"মুক্ত/ছাড়িয়ে নেওয়া; প্রায়শ্চিত্ত করা",syn:"Recover, Save, Atone, Compensate"},
+{n:504,w:"Edify",bn:"নৈতিক/মানসিক উন্নতি ঘটানো",syn:"Enlighten, Educate, Instruct, Uplift"},
+{n:505,w:"Soggy",bn:"ভেজা ও নরম",syn:"Soaked, Sodden, Damp, Waterlogged"},
+{n:506,w:"Slack",bn:"ঢিলেঢালা; অলস",syn:"Loose, Lax, Sluggish, Limp"},
+{n:507,w:"Smolder",bn:"ধিকিধিকি জ্বলা",syn:"Burn, Smoke, Simmer, Seethe"},
+{n:508,w:"Bask",bn:"রোদ পোহানো; উপভোগ করা",syn:"Sunbathe, Relish, Revel, Luxuriate"},
+{n:509,w:"Fluke",bn:"আকস্মিক সৌভাগ্য",syn:"Chance, Accident, Stroke of luck, Coincidence"},
+{n:510,w:"Retard",bn:"ধীর করা; পিছিয়ে দেওয়া",syn:"Delay, Slow, Hinder, Impede"},
+{n:511,w:"Odium",bn:"ঘৃণা; কলঙ্ক",syn:"Hatred, Disgrace, Opprobrium, Disrepute"},
+{n:512,w:"Eclat",bn:"জাঁকজমক; দীপ্তি; খ্যাতি",syn:"Brilliance, Splendor, Glory, Acclaim"},
+{n:513,w:"Plod",bn:"ধীরে ভারী পায়ে হাঁটা",syn:"Trudge, Slog, Lumber, Tramp"},
+{n:514,w:"Raffish",bn:"উচ্ছৃঙ্খল ও আকর্ষণীয়; বেপরোয়া",syn:"Rakish, Dashing, Disreputable, Jaunty"},
+{n:515,w:"Vagary",bn:"খামখেয়ালি; আকস্মিক পরিবর্তন",syn:"Whim, Caprice, Quirk, Fancy"},
+{n:516,w:"Obloquy",bn:"নিন্দা; অপমান",syn:"Disgrace, Slander, Abuse, Censure"},
+{n:517,w:"Peremptory",bn:"অকাট্য; স্বৈরাচারী",syn:"Imperious, Dictatorial, Absolute, Commanding"},
+{n:518,w:"Ruffian",bn:"গুন্ডা; দুর্বৃত্ত",syn:"Thug, Hooligan, Rogue, Brute"},
+{n:519,w:"Savant",bn:"মহাপণ্ডিত; বিশেষজ্ঞ",syn:"Scholar, Sage, Genius, Authority"},
+{n:520,w:"Irksome",bn:"বিরক্তিকর",syn:"Annoying, Tiresome, Tedious, Vexing"}
 ];
 
 const $=s=>document.querySelector(s);
 let favs=[];try{favs=JSON.parse(localStorage.getItem("naznin_favs")||"[]")}catch(e){}
 let hideAllMean=false,onlyFav=false;
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function saveFavs(){try{localStorage.setItem("naznin_favs",JSON.stringify(favs))}catch(e){}}
 
 // স্টাডি ভিউ রেন্ডার
@@ -263,20 +704,20 @@ function render(){
  const rows=DATA.filter(d=>(!onlyFav||favs.includes(d.n))&&(!q||JSON.stringify(d).toLowerCase().includes(q)));
  $("#ct").textContent=rows.length+" টি শব্দ";
  $("#list").innerHTML=rows.length?rows.map(d=>`<div class="card">
- <div class="top"><div><div class="num">Word No: ${d.n}</div><span class="w">${esc(d.w)}</span> <span class="pr mean-hide">[${esc(d.p)}]</span><div class="pos">${esc(d.pos)}</div></div>
+ <div class="top"><div><div class="num">Word No: ${d.n}</div><span class="w">${esc(d.w)}</span>${d.p?` <span class="pr mean-hide">[${esc(d.p)}]</span>`:""}${d.pos?`<div class="pos">${esc(d.pos)}</div>`:""}</div>
  <button class="star ${favs.includes(d.n)?"f":""}" data-n="${d.n}" aria-label="favourite">${favs.includes(d.n)?"★":"☆"}</button></div>
  
  <div class="hide-hint">🙈 <i>অর্থ হাইড করা আছে (মনে করার চেষ্টা করুন)</i></div>
  
  <div class="mean-hide">
-   <div class="lb">English Meaning</div><div>${esc(d.en)}</div>
+   ${d.en?`<div class="lb">English Meaning</div><div>${esc(d.en)}</div>`:""}
    <div class="lb">বাংলা অর্থ</div><div>${esc(d.bn)}</div>
    ${d.syn?`<div class="lb">Synonyms</div><div>${esc(d.syn)}</div>`:""}
    ${d.ant?`<div class="lb">Antonyms</div><div>${esc(d.ant)}</div>`:""}
  </div>
  
- <div class="lb">Example</div>${d.ex.map((e,i)=>`<div><i>${i+1}. ${esc(e)}</i></div>`).join("")}
- <div class="tip mean-hide">💡 <b>মনে রাখার কৌশল:</b> ${esc(d.tip)}</div></div>`).join(""):'<div class="empty">কোনো শব্দ পাওয়া যায়নি</div>';
+ ${d.ex&&d.ex.length?`<div class="lb">Example</div>${d.ex.map((e,i)=>`<div><i>${i+1}. ${esc(e)}</i></div>`).join("")}`:""}
+ ${d.tip?`<div class="tip mean-hide">💡 <b>মনে রাখার কৌশল:</b> ${esc(d.tip)}</div>`:""}</div>`).join(""):'<div class="empty">কোনো শব্দ পাওয়া যায়নি</div>';
 }
 
 $("#q").oninput=render;
@@ -293,18 +734,54 @@ $("#hb").onclick=()=>{
 $("#fb").onclick=()=>{onlyFav=!onlyFav;$("#fb").classList.toggle("on",onlyFav);render()};
 $("#list").onclick=e=>{const b=e.target.closest(".star");if(!b)return;const n=+b.dataset.n;favs=favs.includes(n)?favs.filter(x=>x!==n):[...favs,n];saveFavs();render()};
 
-// ================= এক্সাম সিস্টেম =================
+// ================= এক্সাম সিস্টেম (৫টি ভাগ) =================
+const EXAM_PARTS = [
+  { label: "১ম ভাগ (প্রথম ১০০টি শব্দ)", range: "Word 1 – 100", start: 1, end: 100, mins: 40 },
+  { label: "২য় ভাগ (২য় ১০০টি শব্দ)", range: "Word 101 – 200", start: 101, end: 200, mins: 40 },
+  { label: "৩য় ভাগ (৩য় ১০০টি শব্দ)", range: "Word 201 – 300", start: 201, end: 300, mins: 40 },
+  { label: "৪র্থ ভাগ (৪র্থ ১০০টি শব্দ)", range: "Word 301 – 400", start: 301, end: 400, mins: 40 },
+  { label: "৫ম ভাগ (৫ম ১২০টি শব্দ)", range: "Word 401 – 520", start: 401, end: 520, mins: 48 }
+];
+
+let currentPartIndex = 0;
 let examQuestions = [];
 let examTimer = null;
-let timeLeft = 40 * 60; // ৪০ মিনিট = ২৪০০ সেকেন্ড
+let timeLeft = 40 * 60;
 let totalExamSeconds = 40 * 60;
 
-function startExam(){
-  if(!confirm("আপনি কি ৪০ মিনিটের ১০০ শব্দের পরীক্ষা শুরু করতে চান?")) return;
+function openExamSection(){
+  clearInterval(examTimer);
+  $("#exam-part-grid").innerHTML = EXAM_PARTS.map((p, idx) => {
+    const count = DATA.filter(d => d.n >= p.start && d.n <= p.end).length;
+    return `
+      <button class="exam-part-btn" onclick="startExam(${idx})">
+        <div class="exam-part-title">${esc(p.label)}</div>
+        <div class="exam-part-sub">${esc(p.range)} • ${count}টি শব্দ • সময়: ${p.mins} মিনিট</div>
+      </button>
+    `;
+  }).join("");
+
+  $("#app").style.display = "none";
+  $("#exam-view").style.display = "none";
+  $("#result-view").style.display = "none";
+  $("#exam-select-view").style.display = "block";
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+window.startExam = function(partIdx){
+  currentPartIndex = partIdx;
+  const part = EXAM_PARTS[partIdx];
+  const partWords = DATA.filter(d => d.n >= part.start && d.n <= part.end);
+
+  if(!confirm(`আপনি কি "${part.label}" (${part.mins} মিনিটের ${partWords.length} শব্দের পরীক্ষা) শুরু করতে চান?`)) return;
   
+  totalExamSeconds = part.mins * 60;
+  timeLeft = totalExamSeconds;
+  $("#exam-time-label").textContent = `${part.label} • সময় বাকি (${part.mins} মিনিট)`;
+
   // প্রশ্ন ও অপশন তৈরি (১টি সঠিক + ৩টি র‍্যান্ডম ডিস্ট্রাক্টর)
-  examQuestions = DATA.map((item, idx) => {
-    const distractors = DATA.filter(x => x.n !== item.n)
+  examQuestions = partWords.map((item, idx) => {
+    const distractors = DATA.filter(x => x.n !== item.n && x.bn !== item.bn)
       .sort(() => 0.5 - Math.random())
       .slice(0, 3)
       .map(x => ({ text: x.bn, isCorrect: false }));
@@ -324,6 +801,7 @@ function startExam(){
 
   // স্ক্রিন সুইচ
   $("#app").style.display = "none";
+  $("#exam-select-view").style.display = "none";
   $("#result-view").style.display = "none";
   $("#exam-view").style.display = "block";
   window.scrollTo({top:0, behavior:'smooth'});
@@ -332,7 +810,6 @@ function startExam(){
   updateProgress();
 
   // টাইমার সেট
-  timeLeft = totalExamSeconds;
   clearInterval(examTimer);
   updateTimerDisplay();
   examTimer = setInterval(()=>{
@@ -344,7 +821,7 @@ function startExam(){
       finishExam();
     }
   }, 1000);
-}
+};
 
 function updateTimerDisplay(){
   const m = Math.floor(timeLeft / 60);
@@ -359,7 +836,7 @@ function updateTimerDisplay(){
 function renderExamQuestions(){
   const html = examQuestions.map((q, qIdx) => `
     <div class="q-card" id="qc-${qIdx}">
-      <div class="q-title">প্রশ্ন ${q.qNum}: <span>${esc(q.wordItem.w)}</span> <small style="font-weight:normal;color:var(--mu)">(${esc(q.wordItem.pos)})</small></div>
+      <div class="q-title">প্রশ্ন ${q.qNum}: <span>${esc(q.wordItem.w)}</span>${q.wordItem.pos?` <small style="font-weight:normal;color:var(--mu)">(${esc(q.wordItem.pos)})</small>`:""}</div>
       <div style="font-size:13px;color:var(--mu);margin-bottom:8px">সঠিক অর্থ কোনটি?</div>
       <div class="opts">
         ${q.options.map((opt, oIdx) => `
@@ -425,17 +902,21 @@ function finishExam(){
   });
 
   const score = correctCount; // প্রতি সঠিক উত্তরে ১ মার্ক
+  const totalQ = examQuestions.length;
+  const pct = (score / totalQ) * 100;
+  const part = EXAM_PARTS[currentPartIndex];
 
   // রেজাল্ট সামারি আপডেট
-  $("#res-score-text").textContent = `${score} / 100`;
+  $("#res-part-label").textContent = `${part.label} (${part.range})`;
+  $("#res-score-text").textContent = `${score} / ${totalQ}`;
   $("#r-ok").textContent = correctCount;
   $("#r-err").textContent = wrongCount;
   $("#r-skip").textContent = skippedCount;
   $("#r-time").textContent = timeTakenStr;
 
   let feedback = "";
-  if(score >= 80) feedback = "অসাধারণ পারফরম্যান্স! আপনার প্রস্তুতি খুবই ভালো। 🎉";
-  else if(score >= 50) feedback = "ভালো হয়েছে! আরেকটু প্র্যাকটিস করলে আরো উন্নতি হবে। 👍";
+  if(pct >= 80) feedback = "অসাধারণ পারফরম্যান্স! আপনার প্রস্তুতি খুবই ভালো। 🎉";
+  else if(pct >= 50) feedback = "ভালো হয়েছে! আরেকটু প্র্যাকটিস করলে আরো উন্নতি হবে। 👍";
   else feedback = "আরো একটু রিভিশন দিন এবং পুনরায় পরীক্ষা দিন। লেগে থাকুন! 📚";
   $("#res-msg").textContent = feedback;
 
@@ -452,13 +933,13 @@ function finishExam(){
     return `
       <div class="rev-item ${statusClass}">
         ${statusBadge}
-        <div style="font-size:17px;font-weight:700;color:var(--tx)">${q.qNum}. ${esc(q.wordItem.w)} <small style="font-weight:normal;color:var(--mu)">[${esc(q.wordItem.p)}]</small></div>
-        <div style="font-size:13px;color:var(--mu);margin:2px 0 8px">English: ${esc(q.wordItem.en)}</div>
+        <div style="font-size:17px;font-weight:700;color:var(--tx)">${q.qNum}. ${esc(q.wordItem.w)}${q.wordItem.p?` <small style="font-weight:normal;color:var(--mu)">[${esc(q.wordItem.p)}]</small>`:""}</div>
+        ${q.wordItem.en?`<div style="font-size:13px;color:var(--mu);margin:2px 0 8px">English: ${esc(q.wordItem.en)}</div>`:""}
         
         ${!isSkipped ? `<div style="font-size:14px;margin-bottom:4px"><b>আপনার দেওয়া উত্তর:</b> <span class="${isCorrect?'c-ok':'c-err'}">${esc(userOpt.text)}</span></div>` : ""}
         <div style="font-size:14px;color:var(--ok)"><b>সঠিক অর্থ:</b> ${esc(correctOpt.text)}</div>
-        
-        <div style="font-size:13px;color:var(--mu);margin-top:6px;background:var(--bg);padding:6px 10px;border-radius:8px">💡 <b>টিপস:</b> ${esc(q.wordItem.tip)}</div>
+        ${q.wordItem.syn?`<div style="font-size:13px;color:var(--mu);margin-top:4px"><b>Synonyms:</b> ${esc(q.wordItem.syn)}</div>`:""}
+        ${q.wordItem.tip?`<div style="font-size:13px;color:var(--mu);margin-top:6px;background:var(--bg);padding:6px 10px;border-radius:8px">💡 <b>টিপস:</b> ${esc(q.wordItem.tip)}</div>`:""}
       </div>
     `;
   }).join("");
@@ -469,13 +950,21 @@ function finishExam(){
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
-$("#btn-start-exam").onclick = startExam;
+$("#btn-start-exam").onclick = openExamSection;
+$("#btn-select-back").onclick = ()=>{
+  $("#exam-select-view").style.display = "none";
+  $("#app").style.display = "block";
+  window.scrollTo({top:0, behavior:'smooth'});
+  render();
+};
 $("#btn-submit-exam").onclick = submitWithConfirm;
 $("#btn-submit-exam-bottom").onclick = submitWithConfirm;
-$("#btn-retake").onclick = startExam;
+$("#btn-retake").onclick = () => startExam(currentPartIndex);
+$("#btn-other-part").onclick = openExamSection;
 $("#btn-back-words").onclick = ()=>{
   $("#result-view").style.display = "none";
   $("#exam-view").style.display = "none";
+  $("#exam-select-view").style.display = "none";
   $("#app").style.display = "block";
   window.scrollTo({top:0, behavior:'smooth'});
   render();
