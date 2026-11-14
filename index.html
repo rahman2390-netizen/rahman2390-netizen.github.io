@@ -169,7 +169,8 @@ main{max-width:860px;margin:auto;padding:6px 12px 40px}
 </div>
 
 <script>
-const USER_ID="naznin", PASS_HASH=sha256("naznin123");
+const USER_ID="naznin", PASS_HASH="naznin123";
+
 
 const DATA=[
 {n:1,w:"Luminous",p:"লূমিনাস",pos:"adjective",syn:"Radiant (দীপ্তিমান), Dazzling (চোখধাঁধানো), Glowing (অনুরঞ্জিত), Lucid (স্বচ্ছ, নির্মল), Vivid (স্পষ্ট, উজ্জ্বল)",ant:"Dark (অন্ধকার), Dim (আবছা), Dull (নিস্তেজ), Gloomy (বিষণ্ণ), Shadowy (ছায়াময়)",en:"Softly bright or radiant.",bn:"আলোকোজ্জ্বল; উজ্জ্বল; (লাক্ষণিক) স্পষ্ট; সহজবোধ্য।",ex:["The moon was full, and gave off a luminous blue glow.","I saw the cat's luminous eyes in my car's headlights."],tip:"Luminous ≈ লুমিনাস → \"লুমিনাস\" শুনলেই মনে করো Illuminate (আলোকিত করা) — যা আলো ছড়ায়, সেটাই Luminous।"},
@@ -987,6 +988,12 @@ for(i=0;i<8;i++)hash[i]=(hash[i]+old[i])|0}
 for(i=0;i<8;i++)for(j=3;j+1;j--){var b=(hash[i]>>(j*8))&255;res+=((b<16)?0:"")+b.toString(16)}return res}
 function sha(s){return Promise.resolve(sha256(unescape(encodeURIComponent(s))))}
 function enter(){$("#login").style.display="none";$("#app").style.display="block";render()}
+$("#lf").onsubmit=e=>{e.preventDefault();try{
+ if($("#uid").value.trim().toLowerCase()===USER_ID&&$("#pw").value.trim()===PASS_HASH){try{sessionStorage.setItem("naznin_in","1")}catch(x){}enter()}
+ else $("#err").textContent="ID বা Password ভুল হয়েছে"}catch(x){$("#err").textContent="সমস্যা: "+x.message}};
+$("#lo").onclick=()=>{try{sessionStorage.removeItem("naznin_in")}catch(x){}location.reload()};
+try{if(sessionStorage.getItem("naznin_in")==="1")enter()}catch(e){}
+</script>
 $("#lf").onsubmit=async e=>{e.preventDefault();try{
  if($("#uid").value.trim()===USER_ID&&await sha($("#pw").value)===PASS_HASH){try{sessionStorage.setItem("naznin_in","1")}catch(x){}enter()}
  else $("#err").textContent="ID বা Password ভুল হয়েছে"}catch(x){$("#err").textContent="সমস্যা: "+x.message}};
